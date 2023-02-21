@@ -21,6 +21,7 @@ bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
 mass_formed = np.zeros(bin_cents.size)
 
 # Bin the stars
+print(bin_edges)
 H, _ = np.histogram(zs, bins=bin_edges, weights=data.stars.masses)
 
 # Convert the mass sum in H to SFR in M_sun / Myr
