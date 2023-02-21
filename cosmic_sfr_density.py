@@ -3,6 +3,7 @@ import numpy as np
 from swiftsimio import load
 import matplotlib.pyplot as plt
 from astropy.cosmology import Planck18 as cosmo
+from astropy.cosmology import z_at_value
 import astropy.units as u
 
 
@@ -13,7 +14,7 @@ data = load(sys.argv[1])
 zs = (1 / data.stars.birth_scale_factors.value) - 1
 
 # Create age bins
-bin_edges = cosmo.z_at_value(cosmo.age, np.arange(0, 13.8 * 1000, 100))
+bin_edges = z_at_value(cosmo.age, np.arange(0, 13.8 * 1000, 100))
 bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
 mass_formed = np.zeros(bin_cents.size)
 
