@@ -10,7 +10,7 @@ import astropy.units as u
 data = load(sys.argv[1])
 
 # Get redshift of stellar birth
-zs = (1 / data.stars.birth_scale_factors) - 1
+zs = (1 / data.stars.birth_scale_factors.value) - 1
 
 # Get the stars age at z=0
 ages = cosmo.age(zs).to(u.Myr).value
