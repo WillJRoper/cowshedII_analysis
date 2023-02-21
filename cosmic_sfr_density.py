@@ -18,7 +18,7 @@ ages = cosmo.age(zs).to(u.Myr).value
 # Create age bins
 bin_edges = np.arange(0, 13.8 * 1000, 100)
 bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
-mass_formed = np.zero(bin_cents.size)
+mass_formed = np.zeros(bin_cents.size)
 
 # Bin the stars
 H, _ = np.histogram(ages, bins=bin_edges, weights=data.stars.masses)
