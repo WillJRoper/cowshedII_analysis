@@ -32,6 +32,8 @@ csfrd = sfr / (12.5 ** 3)
 # Set up plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
+ax.loglog()
+ax.grid(True)
 
 # Plot curve
 ax.plot(bin_cents, csfrd)
