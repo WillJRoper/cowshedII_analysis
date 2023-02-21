@@ -12,16 +12,13 @@ data = load(sys.argv[1])
 # Get redshift of stellar birth
 zs = (1 / data.stars.birth_scale_factors.value) - 1
 
-# Get the stars age at z=0
-ages = cosmo.age(zs).to(u.Myr).value
-
 # Create age bins
-bin_edges = np.arange(0, 13.8 * 1000, 100)
+bin_edges = cosmo.z_at_value(cosmo.age, np.arange(0, 13.8 * 1000, 100))
 bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
 mass_formed = np.zeros(bin_cents.size)
 
 # Bin the stars
-H, _ = np.histogram(ages, bins=bin_edges, weights=data.stars.masses)
+H, _ = np.histogram(zs, bins=bin_edges, weights=data.stars.masses)
 
 # Convert the mass sum in H to SFR in M_sun / Myr
 sfr = H / 100
@@ -32,7 +29,7 @@ csfrd = sfr / (12.5 ** 3)
 # Set up plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.loglog()
+ax.semilogy()
 ax.grid(True)
 
 # Plot curve
