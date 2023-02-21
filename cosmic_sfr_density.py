@@ -15,7 +15,7 @@ zs = (1 / data.stars.birth_scale_factors.value) - 1
 print(zs.min(), zs.max())
 # Create age bins
 age_bins = np.arange(0, cosmo.age(30).to(u.Gyr).value, 100) * u.Gyr
-bin_edges = z_at_value(cosmo.age, zs, zmin=0, zmax=35)
+bin_edges = z_at_value(cosmo.age, age_bins, zmin=0, zmax=35)
 bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
 mass_formed = np.zeros(bin_cents.size)
 
