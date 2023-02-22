@@ -23,11 +23,13 @@ ax.grid(True)
 
 for path in paths:
 
+    print(path, path.split("/"))
+
     # Load data
     data = load(path + "/cowshed12_<snap>.hdf5".replace("<snap>", snap))
 
     # Get the label for this run
-    f_bov = float(path.split("/")[-1][2:].replace("p", "."))
+    f_bov = float(path.split("/")[-2][2:].replace("p", "."))
     lab = "$f_\mathrm{bovine}=%.2f$ % f_bov"
 
     # Get redshift of stellar birth
