@@ -58,7 +58,7 @@ for path in paths:
 ax.set_xlabel("$z$")
 ax.set_ylabel("CSFRD / [M$_\odot$ / Myr / Mpc$^{3}$]")
 
-ax.set_xlims(0, 25)
+ax.set_xlim(0, 25)
 
 ax.legend()
 
