@@ -46,7 +46,7 @@ for path in paths:
 
     # Bin the stars
     H, _ = np.histogram(zs, bins=bin_edges,
-                        weights=data.stars.masses * 10 ** 10)
+                        weights=data.stars.masses.value * 10 ** 10)
 
     # Convert the mass sum in H to SFR in M_sun / Myr
     sfr = H / (bin_width * u.Gyr).to(u.yr).value
