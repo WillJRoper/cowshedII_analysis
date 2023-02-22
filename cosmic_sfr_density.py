@@ -46,6 +46,8 @@ for path in paths:
     bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
     mass_formed = np.zeros(bin_cents.size)
 
+    print(data.stars.masses)
+
     # Bin the stars
     H, _ = np.histogram(zs, bins=bin_edges, weights=data.stars.masses)
 
