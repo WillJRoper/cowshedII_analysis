@@ -38,21 +38,18 @@ for path in paths:
 
     # Get redshift of stellar birth
     zs = (1 / data.stars.birth_scale_factors.value) - 1
-    print(zs.min(), zs.max())
     # Create age bins
     age_bins = np.arange(cosmo.age(100).to(u.Gyr).value, 14, bin_width) * u.Gyr
-    print(age_bins)
     bin_edges = z_at_value(cosmo.age, age_bins, zmin=-1, zmax=127)[::-1]
     bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
     mass_formed = np.zeros(bin_cents.size)
 
-    print(data.stars.masses)
-
     # Bin the stars
-    H, _ = np.histogram(zs, bins=bin_edges, weights=data.stars.masses)
+    H, _ = np.histogram(zs, bins=bin_edges,
+                        weights=data.stars.masses * 10 ** 10)
 
     # Convert the mass sum in H to SFR in M_sun / Myr
-    sfr = H / bin_width
+    sfr = H / (bin_width * u.Gyr).to(u.yr).value
 
     # Convert to cSFRD in M_sun / Myr / Mpc^3
     csfrd = sfr / (12.5 ** 3)
@@ -60,9 +57,18 @@ for path in paths:
     # Plot curve
     ax.plot(bin_cents, csfrd, label=lab)
 
+
+def fit(z):
+    # Define the fit
+    return 0.015 * (1 + z) ** 2.7 / (1 + ((1 + z) / 2.9) ** 5.6)
+
+
+# Plot the fit
+ax.plot(bin_cents, fit(bin_cents), label="Madau & Dickinson (2014)")
+
 # Label axes
 ax.set_xlabel("$z$")
-ax.set_ylabel("CSFRD / [M$_\odot$ / Gyr / Mpc$^{3}$]")
+ax.set_ylabel("CSFRD / [M$_\odot$ / yr / Mpc$^{3}$]")
 
 ax.set_xlim(0, 25)
 
