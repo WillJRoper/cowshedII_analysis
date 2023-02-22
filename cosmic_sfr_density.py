@@ -30,7 +30,7 @@ for path in paths:
 
     # Get the label for this run
     f_bov = float(path.split("/")[-2][2:].replace("p", "."))
-    lab = "$f_\mathrm{bovine}=%.2f$ % f_bov"
+    lab = "$f_\mathrm{bovine}=%.2f$" % f_bov
 
     # Get redshift of stellar birth
     zs = (1 / data.stars.birth_scale_factors.value) - 1
