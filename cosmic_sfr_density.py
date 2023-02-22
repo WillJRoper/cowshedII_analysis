@@ -16,7 +16,7 @@ snap = sys.argv[1]
 paths = sys.argv[2:]
 
 # Define the bin resolution in Gyr
-bin_width = 0.01
+bin_width = 0.05
 
 # Set up plot
 fig = plt.figure()
