@@ -64,7 +64,9 @@ def fit(z):
 
 
 # Plot the fit
-ax.plot(bin_cents, fit(bin_cents), label="Madau & Dickinson (2014)")
+okinds = bin_cents <= 8
+ax.plot(bin_cents[okinds], fit(bin_cents[okinds]),
+        label="Madau & Dickinson (2014)")
 
 # Label axes
 ax.set_xlabel("$z$")
