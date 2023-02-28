@@ -52,7 +52,10 @@ for path in paths:
     sfr = H / (bin_width * u.Gyr).to(u.yr).value
 
     # Convert to cSFRD in M_sun / Myr / Mpc^3
-    csfrd = sfr / (12.5 ** 3)
+    if "12" in path:
+        csfrd = sfr / (12.5 ** 3)
+    else:
+        csfrd = sfr / (50 ** 3)
 
     # Plot curve
     ax.plot(bin_cents, csfrd, label=lab)
