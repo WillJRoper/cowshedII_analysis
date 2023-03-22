@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from astropy.cosmology import Planck18 as cosmo
 from astropy.cosmology import z_at_value
 import astropy.units as u
+from matplotlib.lines import Line2D
 
 
 # Get command line args
