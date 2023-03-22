@@ -42,7 +42,6 @@ for path in paths:
 
     # Get the label for this run
     f_bov = float(path.split("/")[-2][2:].replace("p", "."))
-    lab = vol + ", $f_\mathrm{bovine}=%.2f$" % f_bov
 
     # Get redshift of stellar birth
     zs = (1 / data.stars.birth_scale_factors.value) - 1
@@ -67,6 +66,14 @@ for path in paths:
         csfrd = sfr / (50 ** 3)
         c = "darkorange"
 
+    # Get the right color
+    if "1p0" in path:
+        c = "mediumpurple"
+    elif "0p5" in path:
+        c = "darkorange"
+    else:
+        c = "yellowgreen"
+
     # Plot curve
     okinds = csfrd > 0
     ax.plot(bin_cents[okinds], csfrd[okinds], label=lab, color=c, linestyle=ls)
@@ -76,11 +83,34 @@ def fit(z):
     # Define the fit
     return 0.015 * (1 + z) ** 2.7 / (1 + ((1 + z) / 2.9) ** 5.6)
 
+legend_elements1 = [Line2D([0], [0], color='k',
+                           label="COWSHED 50 Mpc",
+                           linestyle="-"),
+                    Line2D([0], [0], color='k',
+                           label="COWSHED 12.5 Mpc",
+                           linestyle="--"),
+                    Line2D([0], [0], color='k',
+                           label="EAGLE 100 Mpc",
+                           linestyle="dotted"),
+                    Line2D([0], [0], color='k',
+                           label="Madau & Dickinson (2014)",
+                           linestyle="dashdot"),
+                    ]
+legend_elements2 = [Line2D([0], [0], color='lightskyblue',
+                           label="$f_\mathrm{bov}= 1.0$",
+                           linestyle="-"),
+                    Line2D([0], [0], color='mediumpurple',
+                           label="$f_\mathrm{bov}= 0.5$",
+                           linestyle="-"),
+                    Line2D([0], [0], color='yellowgreen',
+                           label="$f_\mathrm{bov}= 0.0$",
+                           linestyle="-"),
+                    ]
+
 
 # Plot the fit
 okinds = bin_cents <= 8
-ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="deepskyblue",
-        label="Madau & Dickinson (2014)")
+ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="yellowgreen")
 
 # Label axes
 ax.set_xlabel("$z$")
@@ -88,7 +118,10 @@ ax.set_ylabel("CSFRD / [M$_\odot$ / yr / Mpc$^{3}$]")
 
 ax.set_xlim(0, 25)
 
-ax.legend()
+first_legend = ax.legend(handles=legend_elements2, loc="upper right")
+ax.legend(handles=legend_elements1,
+          loc='lower left')
+ax.add_artist(first_legend)
 
 fig.savefig("../plots/csfrd.png", bbox_inches="tight", dpi=100)
 
