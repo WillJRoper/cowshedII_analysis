@@ -12,8 +12,9 @@ import astropy.units as u
 
 
 # Get command line args
-snap = sys.argv[1]
-paths = sys.argv[2:]
+snap12 = sys.argv[1]
+snap50 = sys.argv[2]
+paths = sys.argv[3:]
 
 # Define the bin resolution in Gyr
 bin_width = 0.05
@@ -30,11 +31,18 @@ for path in paths:
     print(path, path.split("/"))
 
     # Load data
-    data = load(path + "/cowshed12_<snap>.hdf5".replace("<snap>", snap))
+    try:
+        data = load(path + "/cowshed12_<snap>.hdf5".replace("<snap>", snap12))
+        vol = "12.5 cMpc"
+        ls = "--"
+    except OSError:
+        data = load(path + "/cowshed50_<snap>.hdf5".replace("<snap>", snap50))
+        vol = "50 cMpc"
+        ls = "-"
 
     # Get the label for this run
     f_bov = float(path.split("/")[-2][2:].replace("p", "."))
-    lab = "$f_\mathrm{bovine}=%.2f$" % f_bov
+    lab = vol + ", $f_\mathrm{bovine}=%.2f$" % f_bov
 
     # Get redshift of stellar birth
     zs = (1 / data.stars.birth_scale_factors.value) - 1
@@ -54,11 +62,14 @@ for path in paths:
     # Convert to cSFRD in M_sun / Myr / Mpc^3
     if "12" in path:
         csfrd = sfr / (12.5 ** 3)
+        c = "mediumpurple"
     else:
         csfrd = sfr / (50 ** 3)
+        c = "darkorange"
 
     # Plot curve
-    ax.plot(bin_cents, csfrd, label=lab)
+    okinds = csfrd > 0
+    ax.plot(bin_cents[okinds], csfrd[okinds], label=lab, color=c, linestyle=ls)
 
 
 def fit(z):
@@ -68,7 +79,7 @@ def fit(z):
 
 # Plot the fit
 okinds = bin_cents <= 8
-ax.plot(bin_cents[okinds], fit(bin_cents[okinds]),
+ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="deepskyblue",
         label="Madau & Dickinson (2014)")
 
 # Label axes
