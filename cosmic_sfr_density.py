@@ -10,6 +10,7 @@ from astropy.cosmology import Planck18 as cosmo
 from astropy.cosmology import z_at_value
 import astropy.units as u
 from matplotlib.lines import Line2D
+import eagle_IO.eagle_IO as eagle_io
 
 
 # Get command line args
@@ -79,6 +80,39 @@ for path in paths:
     okinds = csfrd > 0
     ax.plot(bin_cents[okinds], csfrd[okinds], color=c, linestyle=ls)
 
+# Get eagle data
+ref_path = "/cosma7/data/Eagle/ScienceRuns/Planck1/L0100N1504/PE/REFERENCE/data"
+
+aborn = eagle_io.read_array('PARTDATA', path, snap,
+                            'PartType4/StellarFormationTime',
+                            noH=True,
+                            physicalUnits=True,
+                            numThreads=8)
+eagle_ms = eagle_io.read_array('PARTDATA', ref_path, '027_z000p101',
+                               'PartType4/InitialMass',
+                               noH=True,
+                               physicalUnits=True,
+                               numThreads=8) * 10 ** 10
+zs = 1 / aborn - 1
+
+# Create age bins
+age_bins = np.arange(cosmo.age(100).to(u.Gyr).value, 14, bin_width) * u.Gyr
+bin_edges = z_at_value(cosmo.age, age_bins, zmin=-1, zmax=127)[::-1]
+bin_cents = (bin_edges[1:] + bin_edges[:-1]) / 2
+
+# Bin the stars
+H, _ = np.histogram(zs, bins=bin_edges,
+                    weights=eagle_ms)
+
+# Convert the mass sum in H to SFR in M_sun / yr
+sfr = H / (bin_width * u.Gyr).to(u.yr).value
+csfrd = sfr / (100 ** 3)
+
+# Plot curve
+okinds = csfrd > 0
+ax.plot(bin_cents[okinds], csfrd[okinds], color="yellowgreen",
+        linestyle="dotted")
+
 
 def fit(z):
     # Define the fit
@@ -97,10 +131,10 @@ legend_elements1 = [Line2D([0], [0], color='k',
                            label="Madau & Dickinson (2014)",
                            linestyle="dashdot"),
                     ]
-legend_elements2 = [Line2D([0], [0], color='lightskyblue',
+legend_elements2 = [Line2D([0], [0], color='mediumpurple',
                            label="$f_\mathrm{bov}= 1.0$",
                            linestyle="-"),
-                    Line2D([0], [0], color='mediumpurple',
+                    Line2D([0], [0], color='darkorange',
                            label="$f_\mathrm{bov}= 0.5$",
                            linestyle="-"),
                     Line2D([0], [0], color='yellowgreen',
@@ -111,7 +145,8 @@ legend_elements2 = [Line2D([0], [0], color='lightskyblue',
 
 # Plot the fit
 okinds = bin_cents <= 8
-ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="yellowgreen")
+ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="yellowgreen",
+        linestyle="dotdash")
 
 # Label axes
 ax.set_xlabel("$z$")
