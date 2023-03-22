@@ -146,7 +146,7 @@ legend_elements2 = [Line2D([0], [0], color='mediumpurple',
 # Plot the fit
 okinds = bin_cents <= 8
 ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="yellowgreen",
-        linestyle="dotdash")
+        linestyle="dashdot")
 
 # Label axes
 ax.set_xlabel("$z$")
