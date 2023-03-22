@@ -76,7 +76,7 @@ for path in paths:
 
     # Plot curve
     okinds = csfrd > 0
-    ax.plot(bin_cents[okinds], csfrd[okinds], label=lab, color=c, linestyle=ls)
+    ax.plot(bin_cents[okinds], csfrd[okinds], color=c, linestyle=ls)
 
 
 def fit(z):
