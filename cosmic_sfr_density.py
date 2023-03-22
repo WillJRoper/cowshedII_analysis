@@ -83,7 +83,7 @@ for path in paths:
 # Get eagle data
 ref_path = "/cosma7/data/Eagle/ScienceRuns/Planck1/L0100N1504/PE/REFERENCE/data"
 
-aborn = eagle_io.read_array('PARTDATA', path, '027_z000p101',
+aborn = eagle_io.read_array('PARTDATA', ref_path, '027_z000p101',
                             'PartType4/StellarFormationTime',
                             noH=True,
                             physicalUnits=True,
