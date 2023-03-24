@@ -13,14 +13,15 @@ from velociraptor import load
 from scipy.optimize import curve_fit
 
 
-def log10phi(m, Mstar, phi_star, alpha):
+def log10phi(D, D_star, log10phi_star, alpha):
 
-    phi = phi_star * np.exp(- m / Mstar) * (m / Mstar) ** alpha
+    y = D - D_star
+    phi = np.log(10) * 10 ** log10phi_star * np.exp(-10**y) * 10 ** (y * (alpha + 1))
     
-    return phi
+    return np.log10(phi)
 
 # Set up snapshot list
-snap_ints = list(range(0, 22))
+snap_ints = [4, 8, 15, 18]
 snaps = []
 for s in snap_ints:
     str_snap_int = "%s" % s
@@ -32,17 +33,21 @@ cmap = plt.cm.plasma
 
 # Set up plot
 fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.grid(True)
+ax1 = fig.add_subplot(221)
+ax2 = fig.add_subplot(222)
+ax3 = fig.add_subplot(223)
+ax4 = fig.add_subplot(224)
+for ax in [ax1, ax2, ax3, ax4]:
+    ax.grid(True)
 
 # Define mass bins
-mass_bins = np.logspace(8, 12, 20)
-bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
-bin_widths = mass_bins[1:] - mass_bins[:-1]
+sfr_bins = np.logspace(-2.5, 4, 20)
+bin_cents = (sfr_bins[1:] + sfr_bins[:-1]) / 2
+bin_widths = sfr_bins[1:] - sfr_bins[:-1]
 
 
 # Loop over snapshots
-for snap in snaps:
+for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
@@ -55,40 +60,35 @@ for snap in snaps:
     except OSError:
         continue
 
-    # Extract masses
-    halo_data.masses.mass_star.convert_to_units("msun")
-    stellar_mass = halo_data.masses.mass_star
-    stellar_mass = stellar_mass[stellar_mass > 0]
+    # Extract sfrs
+    halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
+    sfr = halo_data.star_formation_rate.sfr_gas
+    sfr = sfr[stellar_mass > 0]
 
-    if stellar_mass.size == 0:
+    if sfr.size == 0:
         continue
 
-    print(z, boxsize, np.log10(np.min(stellar_mass)), np.log10(np.max(stellar_mass)))
+    print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
     # Histogram these masses
-    H, _ = np.histogram(stellar_mass, bins=mass_bins)
-
-    if np.sum(H) == 0:
-        continue
+    H, _ = np.histogram(sfr, bins=sfr_bins)
 
     # Convert histogram to mass function
-    gsmf = H / np.product(boxsize) / np.log10(bin_widths)
+    sfrf = H / np.product(boxsize) / np.log10(bin_widths)
 
     # # Fit the data
-    okinds = gsmf > 0
-    # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10*4, 10**10, -1])
+    okinds = sfrf > 0
+    # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], po=[10, 10, 1])
 
     # # Plot this line
-    # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
-    ax.errorbar(np.log10(bin_cents[okinds]), np.log10(gsmf[okinds]),
-                yerr=1 / np.sqrt(h),
+    # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
+    ax.errorbar(bin_cents[okinds], sfrf[okinds], yerr=1 / np.sqrt(h),
                 marker="o", color=cmap(norm(z)))
-
 
 
 fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 
-ax.set_xlabel("$\log_{10}(M_\star / \mathrm{M}_\odot)$")
+ax.set_xlabel("$\log_{10}(\mathrm{SFR}/\mathrm{M}_\odot \mathrm{yr}^{-1})$")
 ax.set_ylabel("$\log_{10}(\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}])$")
 
 # ax.legend()
