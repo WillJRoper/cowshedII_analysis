@@ -85,7 +85,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
         # Define the redshift limit for the SFR bin_cents
         z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
-                            zmin=-1, zmax=127)[::-1]
+                            zmin=-1, zmax=127)
 
         print(z, z_high, cosmo.age(z), cosmo.age(z_high))
 
