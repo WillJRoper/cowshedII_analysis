@@ -15,6 +15,7 @@ from swiftascmaps import lover
 from velociraptor.swift.swift import to_swiftsimio_dataset
 from velociraptor.particles import load_groups
 from swiftgalaxy import SWIFTGalaxy, Velociraptor
+from schwimmbad import MultiPool
 
 
 def log10phi(D, D_star, log10phi_star, alpha):
@@ -79,10 +80,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     print(z, z_high, cosmo.age(z), cosmo.age(z_high))
 
-    sfr = np.zeros(ngal)
-    for i in range(ngal):
-
-        print(i, "of", ngal, end="\r")
+    def calc_sfr(i):
 
         sg = SWIFTGalaxy(
             "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
@@ -98,7 +96,13 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
         # Get only particles formed in bin_cents
         okinds = zs > z_high
-        sfr[i] = np.sum(ms[okinds]) / (100 * 10 ** 6)
+        return np.sum(ms[okinds]) / (100 * 10 ** 6)
+    
+    with MultiPool() as pool:
+        sfrs = list(pool.map(calc_sfr, list(range(ngal))))
+
+    sfr = np.array(sfrs)
+    print(sfr.shape)
 
     print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
