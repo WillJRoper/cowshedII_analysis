@@ -90,9 +90,9 @@ for snap in snaps:
 
     # # Plot this line
     # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
-    ax.errorbar(bin_cents[okinds], gsmf[okinds],
-                yerr=sigma[okinds], linestyle="none",
-                marker="o", color=cmap(norm(z)))
+    ax.scatter(bin_cents[okinds], gsmf[okinds],
+               linestyle="none",
+               marker="o", color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 cbar.set_label("$z$")
