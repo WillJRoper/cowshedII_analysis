@@ -75,13 +75,13 @@ for snap in snaps:
     # Convert histogram to mass function
     gsmf = H / np.product(boxsize) / np.log10(bin_widths)
 
-    # Fit the data
-    okinds = gsmf > 0
-    popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10*4, 10**10, -1])
+    # # Fit the data
+    # okinds = gsmf > 0
+    # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10*4, 10**10, -1])
 
-    # Plot this line
-    xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
-    ax.plot(xs, log10phi(xs, popt[0], popt[1], popt[2]), color=cmap(norm(z)))
+    # # Plot this line
+    # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
+    ax.plot(bin_cents[okinds], gsmf[okinds], color=cmap(norm(z)))
 
 
 
