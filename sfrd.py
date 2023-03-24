@@ -73,7 +73,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
     # Histogram these masses
-    H, _ = np.histogram(sfr, bins=sfr_bins)
+    H, _ = np.histogram(sfr.value, bins=sfr_bins)
 
     # Convert histogram to mass function
     sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
