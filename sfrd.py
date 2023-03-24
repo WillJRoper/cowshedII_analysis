@@ -90,7 +90,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
         print(z, z_high, cosmo.age(z), cosmo.age(z_high))
 
         # Get redshift of stellar birth
-        zs = (1 / data.stars.birth_scale_factorss[mask.stars].value) - 1
+        zs = (1 / data.stars.birth_scale_factors[mask.stars].value) - 1
         ms = data.stars.masses[mask.stars].value * 10 ** 10
 
         # Get only particles formed in bin_cents
