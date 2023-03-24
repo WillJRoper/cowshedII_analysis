@@ -11,6 +11,7 @@ from matplotlib.lines import Line2D
 import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
 from scipy.optimize import curve_fit
+from swiftascmaps import evermore
 
 
 def log10phi(D, D_star, log10phi_star, alpha):
@@ -29,7 +30,7 @@ for s in snap_ints:
 
 # Define the normalisation and colormap
 norm = Normalize(vmin=2, vmax=16)
-cmap = plt.cm.plasma
+cmap = evermore
 
 # Set up plot
 fig = plt.figure()
