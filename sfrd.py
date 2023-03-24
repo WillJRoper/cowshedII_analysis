@@ -82,8 +82,6 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     def calc_sfr(i):
 
-        print(i)
-
         sg = SWIFTGalaxy(
             "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
             Velociraptor(
