@@ -13,7 +13,7 @@ from velociraptor import load
 from scipy.optimize import curve_fit
 
 
-def log10phi(m, M_star, phi_star, alpha):
+def log10phi(m, Mstar, phi_star, alpha):
 
     phi = phi_star * np.exp(- m / Mstar) * (m / Mstar) ** alpha
     
