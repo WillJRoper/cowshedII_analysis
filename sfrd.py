@@ -83,8 +83,15 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
-    ax.errorbar(bin_cents[okinds], sfrf[okinds], yerr=np.sqrt(H[okinds]), 
-                marker="o", color=cmap(norm(z)), linestyle="none")
+    ax.errorbar(np.log10(bin_cents[okinds]), np.log10(sfrf[okinds]),
+                yerr=np.sqrt(np.log10(H[okinds])), 
+                marker="o", linestyle="none")
+
+    ax.text(0.95, 0.05, f'$z={z:.1f}$',
+            bbox=dict(boxstyle="round,pad=0.3", fc='w',
+                      ec="k", lw=1, alpha=0.8),
+            transform=ax.transAxes, horizontalalignment='right',
+            fontsize=8)
 
 
 fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
