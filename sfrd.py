@@ -85,7 +85,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
         print(i, "of", ngal, end="\r")
 
         sg = SWIFTGalaxy(
-            "../EAGLE_50/galaxies/cowshed50_%s" % snap,
+            "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
             Velociraptor(
                 "../EAGLE_50/galaxies/cowshed50_%s" % snap,
                 halo_index=i
