@@ -75,7 +75,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     H, _ = np.histogram(sfr, bins=sfr_bins)
 
     # Convert histogram to mass function
-    sfrf = H / np.product(boxsize) / np.log10(bin_widths)
+    sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
 
     # # Fit the data
     okinds = sfrf > 0
