@@ -42,12 +42,19 @@ bin_widths = mass_bins[1:] - mass_bins[:-1]
 
 
 # Loop over snapshots
+prev_z = None
 for snap in snaps:
 
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
     z = sim_data.metadata.redshift
     boxsize = sim_data.metadata.boxsize
+
+    if prev_z != None:
+        if prev_z - z < 0.5:
+            continue
+
+    prev_z = z
 
     # Load halos
     try:
@@ -81,7 +88,7 @@ for snap in snaps:
     # # Plot this line
     # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
     ax.errorbar(np.log10(bin_cents[okinds]), np.log10(gsmf[okinds]),
-                yerr=1 / np.sqrt(h),
+                yerr=1 / np.sqrt(H),
                 marker="o", color=cmap(norm(z)))
 
 
