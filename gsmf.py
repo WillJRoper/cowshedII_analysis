@@ -81,7 +81,7 @@ for snap in snaps:
         continue
 
     # Convert histogram to mass function
-    gsmf = H / np.product(boxsize) / np.log10(bin_widths)
+    gsmf = H / np.product(boxsize.value) / np.log10(bin_widths)
 
     # # Fit the data
     okinds = gsmf > 0
