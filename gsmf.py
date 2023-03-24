@@ -78,7 +78,7 @@ for snap in snaps:
 
     # Fit the data
     okinds = gsmf > 0
-    popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], po=[10, 10, 1])
+    popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10, 10, 1])
 
     # Plot this line
     xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
