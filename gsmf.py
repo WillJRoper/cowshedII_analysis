@@ -82,6 +82,7 @@ for snap in snaps:
 
     # Convert histogram to mass function
     gsmf = H / np.product(boxsize.value) / np.log10(bin_widths)
+    sigma = np.sqrt(H / np.product(boxsize.value) / np.log10(bin_widths))
 
     # # Fit the data
     okinds = gsmf > 0
@@ -90,7 +91,7 @@ for snap in snaps:
     # # Plot this line
     # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
     ax.errorbar(bin_cents[okinds], gsmf[okinds],
-                yerr=np.sqrt(H[okinds]), linestyle="none",
+                yerr=sigma[okinds], linestyle="none",
                 marker="o", color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)

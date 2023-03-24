@@ -77,6 +77,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # Convert histogram to mass function
     sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
+    sigma = np.sqrt(H / np.product(boxsize.value) / np.log10(bin_widths))
 
     # # Fit the data
     okinds = H > 0
@@ -85,7 +86,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
     ax.errorbar(bin_cents[okinds], sfrf[okinds],
-                yerr=np.sqrt(H[okinds]), 
+                yerr=sigma[okinds], 
                 marker="o", linestyle="none")
 
     ax.text(0.95, 0.05, f'$z={z:.1f}$',
