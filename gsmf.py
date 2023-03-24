@@ -13,12 +13,11 @@ from velociraptor import load
 from scipy.optimize import curve_fit
 
 
-def log10phi(D, D_star, log10phi_star, alpha):
+def log10phi(D, M_star, phi_star, alpha):
 
-    y = D - D_star
-    phi = np.log(10) * 10 ** log10phi_star * np.exp(-10**y) * 10 ** (y * (alpha + 1))
+    phi = phi_star * np.exp(- M / Mstar) * (M / Mstar) ** alpha
     
-    return np.log10(phi)
+    return phi
 
 # Set up snapshot list
 snap_ints = list(range(0, 22))
@@ -78,7 +77,7 @@ for snap in snaps:
 
     # Fit the data
     okinds = gsmf > 0
-    popt, pcov = curve_fit(log10phi, np.log10(bin_cents[okinds]), np.log10(gsmf[okinds]), p0=[5, 1, -1])
+    popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10**5, 10**9, -1])
 
     # Plot this line
     xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
