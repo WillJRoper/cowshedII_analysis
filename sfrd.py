@@ -28,7 +28,7 @@ for s in snap_ints:
     snaps.append(str_snap_int.zfill(4))
 
 # Define the normalisation and colormap
-norm = Normalize(vmin=0, vmax=16)
+norm = Normalize(vmin=2, vmax=16)
 cmap = plt.cm.plasma
 
 # Set up plot
