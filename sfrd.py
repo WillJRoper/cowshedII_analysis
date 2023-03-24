@@ -78,8 +78,10 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     print(z, z_high, cosmo.age(z), cosmo.age(z_high))
 
-    sfr = []
+    sfr = np.zeros(ngal)
     for i in range(ngal):
+
+        print(i, end="\r")
 
         particles, unbound_particles = groups.extract_halo(halo_index=i)
 
@@ -95,7 +97,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
         # Get only particles formed in bin_cents
         okinds = zs > z_high
-        sfr.append(np.sum(ms[okinds]) / (100 * 10 ** 6))
+        sfr[i] = np.sum(ms[okinds]) / (100 * 10 ** 6)
 
     np.array(sfr)
 
