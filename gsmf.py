@@ -76,7 +76,7 @@ for snap in snaps:
     gsmf = H / np.product(boxsize) / np.log10(bin_widths)
 
     # # Fit the data
-    # okinds = gsmf > 0
+    okinds = gsmf > 0
     # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10*4, 10**10, -1])
 
     # # Plot this line
