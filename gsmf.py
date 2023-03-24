@@ -75,7 +75,7 @@ for snap in snaps:
     # Histogram these masses
     H, _ = np.histogram(stellar_mass, bins=mass_bins)
 
-    if np.sum(H) < 50:
+    if np.sum(H) < 20:
         continue
 
     # Convert histogram to mass function
@@ -89,7 +89,7 @@ for snap in snaps:
     # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
     print(np.sqrt(H))
     ax.errorbar(np.log10(bin_cents[okinds]), np.log10(gsmf[okinds]),
-                yerr=1 / np.sqrt(H),
+                yerr=1 / np.sqrt(H[okinds]),
                 marker="o", color=cmap(norm(z)))
 
 
