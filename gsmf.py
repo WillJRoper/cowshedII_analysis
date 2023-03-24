@@ -29,7 +29,7 @@ ax.loglog()
 ax.grid(True)
 
 # Define mass bins
-mass_bins = np.logspace(8, 12, 50)
+mass_bins = np.logspace(8, 12, 30)
 bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
 bin_widths = mass_bins[1:] - mass_bins[:-1]
 
@@ -62,7 +62,7 @@ for snap in snaps:
     H, _ = np.histogram(stellar_mass, bins=mass_bins)
 
     # Convert histogram to mass function
-    gsmf = H / np.product(boxsize) / bin_widths
+    gsmf = H / np.product(boxsize) / np.log10(bin_widths)
 
     # Plot this line
     okinds = gsmf > 0
