@@ -91,7 +91,6 @@ for snap in snaps:
     # # Plot this line
     # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
     ax.scatter(bin_cents[okinds], gsmf[okinds],
-               linestyle="none",
                marker="o", color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)

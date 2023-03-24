@@ -117,7 +117,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
     ax.scatter(bin_cents[okinds], sfrf[okinds],
-               marker="o", linestyle="none")
+               marker="o")
 
     ax.text(0.95, 0.05, f'$z={z:.1f}$',
             bbox=dict(boxstyle="round,pad=0.3", fc='w',
