@@ -26,7 +26,7 @@ ax.grid(True)
 for snap in snaps:
 
     # Load swiftsimio dataset to get volume and redshift
-    sim_data = simload("../EAGLE_50/snapshots/cowshed50_%s.hdf5" % snap)
+    sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
     z = data.metadata.redshift
     boxsize = data.metadata.boxsize
 
@@ -40,6 +40,8 @@ for snap in snaps:
     if stellar_mass.size == 0:
         continue
 
-    print(z, boxsize, np.log10(np.max(stellar_mass)))
+    print(z, boxsize, np.log10(np.min(stellar_mass)), np.log10(np.max(stellar_mass)))
+
+    # Histogram these masses
 
     
