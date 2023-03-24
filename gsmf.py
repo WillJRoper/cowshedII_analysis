@@ -2,7 +2,7 @@ import sys
 import numpy as np
 from swiftsimio import load as simload
 import matplotlib.pyplot as plt
-from matplotlin.color import Normalize
+from matplotlib.color import Normalize
 from matplotlib.cm import ScalarMappable
 from astropy.cosmology import Planck18 as cosmo
 from astropy.cosmology import z_at_value
