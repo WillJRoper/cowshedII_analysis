@@ -2,6 +2,8 @@ import sys
 import numpy as np
 from swiftsimio import load as simload
 import matplotlib.pyplot as plt
+from matplotlin.color import Normalize
+from matplotlib.cm import ScalarMappable
 from astropy.cosmology import Planck18 as cosmo
 from astropy.cosmology import z_at_value
 import astropy.units as u
@@ -16,11 +18,21 @@ for s in snap_ints:
     str_snap_int = "%s" % s
     snaps.append(str_snap_int.zfill(4))
 
+# Define the normalisation and colormap
+norm = Normalize(vmin=0, vmax=16)
+cmap = plt.cm.plasma
+
 # Set up plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.loglog()
 ax.grid(True)
+
+# Define mass bins
+mass_bins = np.logspace(8, 12)
+bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
+bin_widths = mass_bins[1:] - mass_bins[:-1]
+
 
 # Loop over snapshots
 for snap in snaps:
@@ -36,6 +48,7 @@ for snap in snaps:
     # Extract masses
     halo_data.masses.mass_star_30kpc.convert_to_units("msun")
     stellar_mass = halo_data.masses.mass_star_30kpc
+    stellar_mass = stellar_mass[stellar_mass > 0]
 
     if stellar_mass.size == 0:
         continue
@@ -43,5 +56,21 @@ for snap in snaps:
     print(z, boxsize, np.log10(np.min(stellar_mass)), np.log10(np.max(stellar_mass)))
 
     # Histogram these masses
+    H = np.histogram(stellar_mass, bins=mass_bins)
 
-    
+    # Convert histogram to mass function
+    gsmf = H / np.product(boxsize) / bin_widths
+
+    # Plot this line
+    ax.plot(bin_cents, gsmf, color=cmap(norm(z)))
+
+fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
+
+ax.set_xlabel("$M_\star / \mathrm{M}_\odot$")
+ax.set_ylabel("$\phi / [\mathrm{M}_\odot^{-1} \mathrm{cMpc}^{-3} dex^{-1}]")
+
+# ax.legend()
+
+fig.savefig("../plots/gsmf.png", bbox_inches="tight", dpi=100)
+
+plt.close(fig)
