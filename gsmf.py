@@ -29,7 +29,7 @@ ax.loglog()
 ax.grid(True)
 
 # Define mass bins
-mass_bins = np.logspace(7, 12)
+mass_bins = np.logspace(8, 12, 50)
 bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
 bin_widths = mass_bins[1:] - mass_bins[:-1]
 
@@ -49,8 +49,8 @@ for snap in snaps:
         continue
 
     # Extract masses
-    halo_data.masses.mass_star_30kpc.convert_to_units("msun")
-    stellar_mass = halo_data.masses.mass_star_30kpc
+    halo_data.masses.mass_star.convert_to_units("msun")
+    stellar_mass = halo_data.masses.mass_star
     stellar_mass = stellar_mass[stellar_mass > 0]
 
     if stellar_mass.size == 0:
@@ -71,7 +71,7 @@ for snap in snaps:
 fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 
 ax.set_xlabel("$M_\star / \mathrm{M}_\odot$")
-ax.set_ylabel("$\phi / [\mathrm{M}_\odot^{-1} \mathrm{cMpc}^{-3} dex^{-1}]")
+ax.set_ylabel("$\phi / [\mathrm{M}_\odot^{-1} \mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
 
 # ax.legend()
 
