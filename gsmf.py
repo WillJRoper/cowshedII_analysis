@@ -10,6 +10,15 @@ import astropy.units as u
 from matplotlib.lines import Line2D
 import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
+from scipy.optimize import curve_fit
+
+
+def log10phi(D, D_star, log10phi_star, alpha):
+
+    y = D - D_star
+    phi = np.log(10) * 10 ** log10phi_star * np.exp(-10**y) * 10 ** (y * (alpha + 1))
+    
+    return np.log10(phi)
 
 # Set up snapshot list
 snap_ints = list(range(0, 22))
@@ -29,7 +38,7 @@ ax.loglog()
 ax.grid(True)
 
 # Define mass bins
-mass_bins = np.logspace(8, 12, 30)
+mass_bins = np.logspace(8, 12, 100)
 bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
 bin_widths = mass_bins[1:] - mass_bins[:-1]
 
@@ -64,9 +73,15 @@ for snap in snaps:
     # Convert histogram to mass function
     gsmf = H / np.product(boxsize) / np.log10(bin_widths)
 
-    # Plot this line
+    # Fit the data
     okinds = gsmf > 0
-    ax.plot(bin_cents[okinds], gsmf[okinds], color=cmap(norm(z)))
+    popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], po=[10, 10, 1])
+
+    # Plot this line
+    xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
+    ax.plot(xs, log10phi(xs, popt[0], popt[1], popt[2]), color=cmap(norm(z)))
+
+
 
 fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 
