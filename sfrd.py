@@ -14,6 +14,7 @@ from scipy.optimize import curve_fit
 from swiftascmaps import lover
 from velociraptor.swift.swift import to_swiftsimio_dataset
 from velociraptor.particles import load_groups
+from swiftgalaxy import SWIFTGalaxy, Velociraptor
 
 
 def log10phi(D, D_star, log10phi_star, alpha):
@@ -60,9 +61,9 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # Load halos
     try:
-        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties.0" % snap)
+        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties" % snap)
         groups = load_groups(
-            "../EAGLE_50/galaxies/cowshed50_%s.catalog_groups.0" % snap,
+            "../EAGLE_50/galaxies/cowshed50_%s.catalog_groups" % snap,
             catalogue=halo_data
         )
     except OSError:
@@ -83,23 +84,21 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
         print(i, "of", ngal, end="\r")
 
-        particles, unbound_particles = groups.extract_halo(halo_index=i)
-
-        data, mask = to_swiftsimio_dataset(
-            particles,
-            "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
-            generate_extra_mask=True
+        sg = SWIFTGalaxy(
+            "../EAGLE_50/galaxies/cowshed50_%s" % snap,
+            Velociraptor(
+                "../EAGLE_50/galaxies/cowshed50_%s" % snap,
+                halo_index=i
+            )
         )
 
         # Get redshift of stellar birth
-        zs = (1 / data.stars.birth_scale_factors[mask.stars].value) - 1
-        ms = data.stars.masses[mask.stars].value * 10 ** 10
+        zs = (1 / sg.stars.birth_scale_factors.value) - 1
+        ms = sg.stars.masses.value * 10 ** 10
 
         # Get only particles formed in bin_cents
         okinds = zs > z_high
         sfr[i] = np.sum(ms[okinds]) / (100 * 10 ** 6)
-
-    np.array(sfr)
 
     print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
