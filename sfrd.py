@@ -12,6 +12,8 @@ import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
 from scipy.optimize import curve_fit
 from swiftascmaps import lover
+from velociraptor.swift.swift import to_swiftsimio_dataset
+from velociraptor.particles import load_groups
 
 
 def log10phi(D, D_star, log10phi_star, alpha):
@@ -59,21 +61,48 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     # Load halos
     try:
         halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties.0" % snap)
+        groups = load_groups(
+            "../EAGLE_50/galaxies/cowshed50_%s.catalog_groups.0" % snap,
+            catalogue=halo_data
+        )
     except OSError:
         continue
 
     # Extract sfrs
     halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
-    sfr = halo_data.star_formation_rate.sfr_gas
-    # sfr = sfr[sfr > 0]
+    ngal = halo_data.star_formation_rate.sfr_gas.size
 
-    if sfr.size == 0:
-        continue
+    sfr = []
+    for i in range(ngal):
+
+        particles, unbound_particles = groups.extract_halo(halo_index=i)
+
+        data, mask = to_swiftsimio_dataset(
+            particles,
+            "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
+            generate_extra_mask=True
+        )
+
+        # Define the redshift limit for the SFR bin_cents
+        z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
+                            zmin=-1, zmax=127)[::-1]
+
+        print(z, z_high, cosmo.age(z), cosmo.age(z_high))
+
+        # Get redshift of stellar birth
+        zs = (1 / data.stars.birth_scale_factorss[mask.stars].value) - 1
+        ms = data.stars.masses[mask.stars].value * 10 ** 10
+
+        # Get only particles formed in bin_cents
+        okinds = zs > z_high
+        sfr.append(np.sum(ms[okinds]) / (100 * 10 ** 6))
+
+    np.array(sfr)
 
     print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
     # Histogram these masses
-    H, _ = np.histogram(sfr.value, bins=sfr_bins)
+    H, _ = np.histogram(sfr, bins=sfr_bins)
 
     # Convert histogram to mass function
     sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
@@ -94,7 +123,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
             transform=ax.transAxes, horizontalalignment='right',
             fontsize=8)
 
-ax.set_xlabel("$\mathrm{SFR}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
+ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
 ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
 
 # ax.legend()
