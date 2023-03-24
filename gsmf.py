@@ -94,7 +94,8 @@ for snap in snaps:
 
 
 
-fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
+cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
+cbar.set_label("$z$")
 
 ax.set_xlabel("$\log_{10}(M_\star / \mathrm{M}_\odot)$")
 ax.set_ylabel("$\log_{10}(\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}])$")

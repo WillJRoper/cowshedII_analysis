@@ -94,6 +94,6 @@ ax.set_ylabel("$\log_{10}(\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}])$")
 
 # ax.legend()
 
-fig.savefig("../plots/gsmf.png", bbox_inches="tight", dpi=100)
+fig.savefig("../plots/sfrf.png", bbox_inches="tight", dpi=100)
 
 plt.close(fig)
