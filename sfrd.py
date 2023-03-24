@@ -82,7 +82,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
-    ax.errorbar(bin_cents[okinds], sfrf[okinds], yerr=1 / np.sqrt(H),
+    ax.errorbar(bin_cents[okinds], sfrf[okinds], yerr=np.sqrt(H),
                 marker="o", color=cmap(norm(z)))
 
 
