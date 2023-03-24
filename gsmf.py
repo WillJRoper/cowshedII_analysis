@@ -27,8 +27,8 @@ for snap in snaps:
 
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
-    z = data.metadata.redshift
-    boxsize = data.metadata.boxsize
+    z = sim_data.metadata.redshift
+    boxsize = sim_data.metadata.boxsize
 
     # Load halos
     halo_data = load("galaxies/cowshed50_%s.properties.0" % snap)
