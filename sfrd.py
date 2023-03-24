@@ -72,6 +72,12 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
     ngal = halo_data.star_formation_rate.sfr_gas.size
 
+    # Define the redshift limit for the SFR bin_cents
+    z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
+                        zmin=-1, zmax=127)
+
+    print(z, z_high, cosmo.age(z), cosmo.age(z_high))
+
     sfr = []
     for i in range(ngal):
 
@@ -82,12 +88,6 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
             "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
             generate_extra_mask=True
         )
-
-        # Define the redshift limit for the SFR bin_cents
-        z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
-                            zmin=-1, zmax=127)
-
-        print(z, z_high, cosmo.age(z), cosmo.age(z_high))
 
         # Get redshift of stellar birth
         zs = (1 / data.stars.birth_scale_factors[mask.stars].value) - 1
