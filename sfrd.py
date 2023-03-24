@@ -43,7 +43,7 @@ for ax in [ax1, ax2, ax3, ax4]:
     ax.loglog()
 
 # Define mass bins
-sfr_bins = np.logspace(-3, 5, 20)
+sfr_bins = np.logspace(-3, 7, 20)
 bin_cents = (sfr_bins[1:] + sfr_bins[:-1]) / 2
 bin_widths = sfr_bins[1:] - sfr_bins[:-1]
 
