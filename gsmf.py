@@ -31,7 +31,7 @@ for snap in snaps:
     boxsize = sim_data.metadata.boxsize
 
     # Load halos
-    halo_data = load("galaxies/cowshed50_%s.properties.0" % snap)
+    halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties.0" % snap)
 
     # Extract masses
     data.masses.mass_star_30kpc.convert_to_units("msun")
