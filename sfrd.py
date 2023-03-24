@@ -40,9 +40,10 @@ ax3 = fig.add_subplot(223)
 ax4 = fig.add_subplot(224)
 for ax in [ax1, ax2, ax3, ax4]:
     ax.grid(True)
+    ax.loglog()
 
 # Define mass bins
-sfr_bins = np.logspace(-2.5, 4, 20)
+sfr_bins = np.logspace(-3, 5, 20)
 bin_cents = (sfr_bins[1:] + sfr_bins[:-1]) / 2
 bin_widths = sfr_bins[1:] - sfr_bins[:-1]
 
@@ -78,13 +79,13 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
 
     # # Fit the data
-    okinds = sfrf > 0
+    okinds = H > 0
     # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], po=[10, 10, 1])
 
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
-    ax.errorbar(np.log10(bin_cents[okinds]), np.log10(sfrf[okinds]),
-                yerr=np.sqrt(np.log10(H[okinds])), 
+    ax.errorbar(bin_cents[okinds], sfrf[okinds],
+                yerr=np.sqrt(H[okinds]), 
                 marker="o", linestyle="none")
 
     ax.text(0.95, 0.05, f'$z={z:.1f}$',
@@ -93,11 +94,8 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
             transform=ax.transAxes, horizontalalignment='right',
             fontsize=8)
 
-
-fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
-
-ax.set_xlabel("$\log_{10}(\mathrm{SFR}/\mathrm{M}_\odot \mathrm{yr}^{-1})$")
-ax.set_ylabel("$\log_{10}(\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}])$")
+ax.set_xlabel("$\mathrm{SFR}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
+ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
 
 # ax.legend()
 

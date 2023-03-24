@@ -35,6 +35,7 @@ cmap = lover
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.grid(True)
+ax.loglog()
 
 # Define mass bins
 mass_bins = np.logspace(8, 12, 20)
@@ -88,15 +89,15 @@ for snap in snaps:
 
     # # Plot this line
     # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
-    ax.errorbar(np.log10(bin_cents[okinds]), np.log10(gsmf[okinds]),
-                yerr=1 / np.sqrt(np.log10(H[okinds])), linestyle="none",
+    ax.errorbar(bin_cents[okinds], gsmf[okinds],
+                yerr=np.sqrt(H[okinds]), linestyle="none",
                 marker="o", color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 cbar.set_label("$z$")
 
-ax.set_xlabel("$\log_{10}(M_\star / \mathrm{M}_\odot)$")
-ax.set_ylabel("$\log_{10}(\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}])$")
+ax.set_xlabel("$M_\star / \mathrm{M}_\odot$")
+ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
 
 # ax.legend()
 
