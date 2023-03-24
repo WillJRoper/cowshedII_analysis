@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
 from scipy.optimize import curve_fit
-from swiftascmaps import evermore
+from swiftascmaps import lover
 
 
 def log10phi(D, D_star, log10phi_star, alpha):
@@ -64,7 +64,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     # Extract sfrs
     halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
     sfr = halo_data.star_formation_rate.sfr_gas
-    sfr = sfr[stellar_mass > 0]
+    sfr = sfr[sfr > 0]
 
     if sfr.size == 0:
         continue

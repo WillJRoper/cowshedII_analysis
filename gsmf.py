@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
 from scipy.optimize import curve_fit
-from swiftascmaps import evermore
+from swiftascmaps import lover
 
 
 def log10phi(m, Mstar, phi_star, alpha):
