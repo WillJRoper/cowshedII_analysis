@@ -37,7 +37,7 @@ ax.loglog()
 ax.grid(True)
 
 # Define mass bins
-mass_bins = np.logspace(8, 12, 100)
+mass_bins = np.logspace(8, 12, 20)
 bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
 bin_widths = mass_bins[1:] - mass_bins[:-1]
 
