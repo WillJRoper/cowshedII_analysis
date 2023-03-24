@@ -29,7 +29,7 @@ for s in snap_ints:
 
 # Define the normalisation and colormap
 norm = Normalize(vmin=2, vmax=16)
-cmap = evermore
+cmap = lover
 
 # Set up plot
 fig = plt.figure()
