@@ -81,7 +81,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     sfr = np.zeros(ngal)
     for i in range(ngal):
 
-        print(i, end="\r")
+        print(i, "of", ngal, end="\r")
 
         particles, unbound_particles = groups.extract_halo(halo_index=i)
 
