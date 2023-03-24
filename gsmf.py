@@ -29,7 +29,7 @@ ax.loglog()
 ax.grid(True)
 
 # Define mass bins
-mass_bins = np.logspace(8, 12)
+mass_bins = np.logspace(7, 12)
 bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
 bin_widths = mass_bins[1:] - mass_bins[:-1]
 
@@ -56,13 +56,14 @@ for snap in snaps:
     print(z, boxsize, np.log10(np.min(stellar_mass)), np.log10(np.max(stellar_mass)))
 
     # Histogram these masses
-    H = np.histogram(stellar_mass, bins=mass_bins)
+    H, _ = np.histogram(stellar_mass, bins=mass_bins)
 
     # Convert histogram to mass function
     gsmf = H / np.product(boxsize) / bin_widths
 
     # Plot this line
-    ax.plot(bin_cents, gsmf, color=cmap(norm(z)))
+    okinds = gsmf > 0
+    ax.plot(bin_cents[okinds], gsmf[okinds], color=cmap(norm(z)))
 
 fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 
