@@ -75,7 +75,7 @@ for snap in snaps:
     # Histogram these masses
     H, _ = np.histogram(stellar_mass, bins=mass_bins)
 
-    if np.sum(H) < 10:
+    if np.sum(H) < 50:
         continue
 
     # Convert histogram to mass function
