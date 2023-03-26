@@ -113,7 +113,7 @@ def fit(tag, prev_z):
     print(hist_all)
     phi_all = (hist_all / V) / (massBinLimits[1] - massBinLimits[0])
 
-    if np.sum(hist_all) < 10:
+    if np.sum(hist_all) < 50:
         print("Less than 10 counts")
         return
     
