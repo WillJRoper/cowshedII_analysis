@@ -73,11 +73,13 @@ def plot_df(ax, phi, phi_sigma, hist, massBins,
                 label=label, c=color, alpha=alpha, **kwargs)
 
 # Set up snapshot list
+custom_priors = {}
 snap_ints = list(range(0, 22))
 snaps = []
 for s in snap_ints:
     str_snap_int = "%s" % s
     snaps.append(str_snap_int.zfill(4))
+    custom_priors[snaps[-1]] = {'phi1':-5.0,'phi2':-5.0,'a1':-2.0,'a2':-1.0}
 
 # Define the normalisation and colormap
 norm = Normalize(vmin=2, vmax=16)
@@ -127,6 +129,7 @@ for snap in snaps:
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
     hist = np.float64(hist)
+    print(hist)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
     
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
