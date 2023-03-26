@@ -144,9 +144,6 @@ for s in snap_ints:
     snaps.append(str_snap_int.zfill(4))
     custom_priors[snaps[-1]] = {'phi1':-5.0,'phi2':-5.0,'a1':-2.0,'a2':-1.0}
 
-
-tags = list(zip(fl.tags, fl_ref.tags))
-
 prev_z = None
 for tag in snaps:
     prev_z = fit(tag, prev_z)
