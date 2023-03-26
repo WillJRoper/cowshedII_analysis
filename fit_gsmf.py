@@ -77,13 +77,14 @@ def fitdf(N_up, N, V, mstar_temp, cprior, name):
 
 def fit(tag, prev_z): 
     
-    print(tag)
     snap = tag
 
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
     z = sim_data.metadata.redshift
     boxsize = sim_data.metadata.boxsize
+
+    print(snap, z)
 
     if prev_z != None:
         if prev_z - z < 0.5:
@@ -112,8 +113,8 @@ def fit(tag, prev_z):
     print(hist_all)
     phi_all = (hist_all / V) / (massBinLimits[1] - massBinLimits[0])
 
-    if np.sum(hist_all) == 0:
-        print("no counts")
+    if np.sum(hist_all) < 10:
+        print("Less than 10 counts")
         return
     
     phi_sigma = (np.sqrt(hist_all) / V) / (massBinLimits[1] - massBinLimits[0])

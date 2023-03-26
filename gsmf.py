@@ -131,6 +131,10 @@ for snap in snaps:
     hist = np.float64(hist_all)
     print(hist)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
+
+    if np.sum(hist_all) == 0:
+        print("no counts")
+        return
     
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
         
