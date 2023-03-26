@@ -110,9 +110,9 @@ def fit(tag, prev_z):
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
     print(hist_all)
-    phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
+    phi_all = (hist_all / V) / (massBinLimits[1] - massBinLimits[0])
     
-    phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
+    phi_sigma = (np.sqrt(hist_all) / V) / (massBinLimits[1] - massBinLimits[0])
         
     ## ---- Get fit
     sample_ID = 'cowshed50_gsmf_%s' % snap
