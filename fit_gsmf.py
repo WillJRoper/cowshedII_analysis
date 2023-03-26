@@ -109,8 +109,7 @@ def fit(tag, prev_z):
     V = np.product(boxsize.value)
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
-    hist = np.float64(hist)
-    print(hist)
+    print(hist_all)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
     
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
