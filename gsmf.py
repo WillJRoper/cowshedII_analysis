@@ -128,7 +128,7 @@ for snap in snaps:
     V = np.product(boxsize.value)
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
-    hist = np.float64(hist)
+    hist = np.float64(hist_all)
     print(hist)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
     

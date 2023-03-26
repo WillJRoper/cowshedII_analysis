@@ -111,6 +111,10 @@ def fit(tag, prev_z):
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
     print(hist_all)
     phi_all = (hist_all / V) / (massBinLimits[1] - massBinLimits[0])
+
+    if np.sum(hist_all) == 0:
+        print("no counts")
+        return
     
     phi_sigma = (np.sqrt(hist_all) / V) / (massBinLimits[1] - massBinLimits[0])
         
