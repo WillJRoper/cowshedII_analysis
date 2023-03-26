@@ -109,6 +109,7 @@ def fit(tag, prev_z):
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
     hist = np.float64(hist)
+    print(hist)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
     
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
@@ -120,6 +121,7 @@ def fit(tag, prev_z):
     N = models.phi_to_N(phi_all, V, massBinLimits)
 
     fitdf(N, hist_all, V, mstar_temp, cprior=custom_priors[tag], name=sample_ID)
+    print(sample_ID, "fit done?")
    
     # ## Ref ##
     # # if len(mstar_ref[rtag]) > 0:
