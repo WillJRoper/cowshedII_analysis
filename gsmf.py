@@ -14,11 +14,63 @@ from scipy.optimize import curve_fit
 from swiftascmaps import lover
 
 
-def log10phi(m, Mstar, phi_star, alpha):
+import fitDF.fitDF as fitDF
+import fitDF.models as models
+import fitDF.analyse as analyse
 
-    phi = phi_star * np.exp(- m / Mstar) * (m / Mstar) ** alpha
-    
-    return phi
+
+def mass_bins():
+    massBinLimits = np.linspace(7.95, 13.35, 28)
+    massBins = np.logspace(8.05, 13.25, 27)
+    return massBins, massBinLimits
+
+def plot_df(ax, phi, phi_sigma, hist, massBins,
+            label, color, hist_lim=10, lw=3, alpha=0.7, lines=True):
+
+    kwargs = {}
+    kwargs_lo = {}
+
+    if lines:
+        kwargs['lw']=lw
+        
+        kwargs_lo['lw']=lw
+        kwargs_lo['linestyle']='dotted'
+    else:
+        kwargs['ls']=''
+        kwargs['marker']='o'
+        
+        kwargs_lo['ls']=''
+        kwargs_lo['marker']='o'
+        kwargs_lo['markerfacecolor']='white'
+        kwargs_lo['markeredgecolor']=color
+        
+        
+    def yerr(phi,phi_sigma):
+
+        p = phi
+        ps = phi_sigma
+        
+        mask = (ps == p)
+        
+        err_up = np.abs(np.log10(p) - np.log10(p + ps))
+        err_lo = np.abs(np.log10(p) - np.log10(p - ps))
+        
+        err_lo[mask] = 100
+        
+        return err_up, err_lo, mask
+
+
+    err_up, err_lo, mask = yerr(phi,phi_sigma)
+
+    # err_lo = np.log10(phi) - np.log10(phi - phi_sigma[0])
+    # err_up = np.log10(phi) - np.log10(phi + phi_sigma[1])
+        
+    ax.errorbar(np.log10(massBins[phi > 0.]),
+                np.log10(phi[phi > 0.]),
+                yerr=[err_lo[phi > 0.],
+                      err_up[phi > 0.]],
+                #uplims=(mask[phi > 0.]),
+                label=label, c=color, alpha=alpha, **kwargs)
 
 # Set up snapshot list
 snap_ints = list(range(0, 22))
@@ -38,10 +90,9 @@ ax.grid(True)
 ax.loglog()
 
 # Define mass bins
-mass_bins = np.logspace(8, 12, 20)
-bin_cents = (mass_bins[1:] + mass_bins[:-1]) / 2
-bin_widths = mass_bins[1:] - mass_bins[:-1]
-
+massBins, massBinLimits = mass_bins() 
+print(np.log10(massBins))
+print(massBinLimits)
 
 # Loop over snapshots
 prev_z = None
@@ -67,31 +118,34 @@ for snap in snaps:
     # Extract masses
     halo_data.masses.mass_star.convert_to_units("msun")
     stellar_mass = halo_data.masses.mass_star
-    stellar_mass = stellar_mass[stellar_mass > 0]
+    mstar_temp = stellar_mass[stellar_mass > 0]
 
-    if stellar_mass.size == 0:
+    if mstar_temp.size == 0:
         continue
 
-    print(z, boxsize, np.log10(np.min(stellar_mass)), np.log10(np.max(stellar_mass)))
+    V = np.product(boxsize.value)
 
-    # Histogram these masses
-    H, _ = np.histogram(stellar_mass, bins=mass_bins)
+    hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
+    hist = np.float64(hist)
+    phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
+    
+    phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
+        
+    ## ---- Get fit
+    sample_ID = 'cowshed50_gsmf_%s' % snap
 
-    if np.sum(H) < 10:
-        continue
+    a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False)
+    
+    # from methods import switch_samples
+    # _samples = switch_samples(a.samples)
+    #a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False, samples=_samples)
 
-    # Convert histogram to mass function
-    gsmf = H / np.product(boxsize.value) / np.log10(bin_widths)
-    sigma = np.sqrt(H / np.product(boxsize.value) / np.log10(bin_widths))
-
-    # # Fit the data
-    okinds = gsmf > 0
-    # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], p0=[10*4, 10**10, -1])
-
-    # # Plot this line
-    # xs = np.linspace(mass_bins.min(), mass_bins.max(), 1000)
-    ax.plot(bin_cents[okinds], gsmf[okinds],
-               marker="o", color=cmap(norm(z)))
+    plot_df(ax, phi_all, phi_sigma, hist_all, massBins=massBins,
+            color=color=cmap(norm(z)), lines=False, label='', lw=5)
+    model.update_params(a.median_fit)
+    
+    xvals = np.linspace(7,15,1000)
+    ax.plot(xvals, a.model.log10phi(xvals), color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 cbar.set_label("$z$")
