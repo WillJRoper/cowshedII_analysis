@@ -93,8 +93,9 @@ def fit(tag, prev_z):
 
     # Load halos
     try:
-        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties.0" % snap)
-    except OSError:
+        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties" % snap)
+    except OSError as e:
+        print(e)
         return
 
     # Extract masses

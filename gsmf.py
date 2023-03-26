@@ -113,7 +113,7 @@ for snap in snaps:
 
     # Load halos
     try:
-        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties.0" % snap)
+        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties" % snap)
     except OSError:
         continue
 
