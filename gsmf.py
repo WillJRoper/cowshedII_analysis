@@ -141,7 +141,7 @@ for snap in snaps:
     #a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False, samples=_samples)
 
     plot_df(ax, phi_all, phi_sigma, hist_all, massBins=massBins,
-            color=color=cmap(norm(z)), lines=False, label='', lw=5)
+            color=cmap(norm(z)), lines=False, label='', lw=5)
     model.update_params(a.median_fit)
     
     xvals = np.linspace(7,15,1000)
