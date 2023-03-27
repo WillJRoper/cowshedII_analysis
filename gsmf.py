@@ -142,9 +142,10 @@ for snap in snaps:
         
     ## ---- Get fit
     sample_ID = 'cowshed50_gsmf_%s' % snap
-
-    a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False)
-    
+    try:
+        a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False)
+    except OSError:
+        continue
     # from methods import switch_samples
     # _samples = switch_samples(a.samples)
     #a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False, samples=_samples)
