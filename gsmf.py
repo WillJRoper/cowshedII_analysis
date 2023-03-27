@@ -149,10 +149,8 @@ for snap in snaps:
     if np.sum(hist_all) < 10:
         print("Less than 10 counts")
         continue
-    
-    phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
 
-    err_up, err_lo, mask = yerr(phi_all, phi_sigma)
+    print("Plotting:", z)
 
     okinds = phi_all > 0
     ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
