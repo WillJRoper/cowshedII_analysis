@@ -89,7 +89,7 @@ cmap = lover
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.grid(True)
-ax.loglog()
+# ax.loglog()
 
 # Define mass bins
 massBins, massBinLimits = mass_bins() 
