@@ -144,14 +144,10 @@ def fit(tag, prev_z):
 
 # Set up snapshot list
 custom_priors = {}
-snap_ints = list(range(0, 22))
-snaps = []
-for s in snap_ints:
-    str_snap_int = "%s" % s
-    snaps.append(str_snap_int.zfill(4))
-    custom_priors[snaps[-1]] = {'phi1':-5.0,'phi2':-5.0,'a1':-2.0,'a2':-1.0}
+str_snap_int = sys.argv[1]
+snap = str_snap_int.zfill(4)
+custom_priors[snap] = {'phi1':float(sys.argv[2]),'phi2':float(sys.argv[3]),
+                       'a1': float(sys.argv[4]),'a2': float(sys.argv[5])}
 
-prev_z = None
-for tag in snaps:
-    prev_z = fit(tag, prev_z)
+prev_z = fit(snap, prev_z=None)
 

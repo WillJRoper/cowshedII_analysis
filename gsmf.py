@@ -132,7 +132,7 @@ for snap in snaps:
     print(hist)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
 
-    if np.sum(hist_all) < 10:
+    if np.sum(hist_all) < 50:
         print("Less than 10 counts")
         continue
     
