@@ -123,7 +123,7 @@ def fit(tag, prev_z):
 
     # Mask out 0s
     okinds = hist_all > 0
-    binlim_okinds = np.zeros(hist_all.size + 1)
+    binlim_okinds = np.zeros(hist_all.size + 1, dtype=bool)
     binlim_okinds[0] = 1
     binlim_okinds[1:][okinds] = 1
     hist_all = hist_all[okinds]
