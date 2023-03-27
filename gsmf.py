@@ -97,7 +97,7 @@ eagle_snaps = []
 prev_z = 100
 for s in snaps:
     z = float(s.split('_')[1][1:].replace("p", "."))
-    if z < 2.5:
+    if z < 2:
         continue
     if z > 12:
         continue
