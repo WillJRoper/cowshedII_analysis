@@ -45,7 +45,7 @@ def fitdf(N_up, N, V, mstar_temp, cprior, name, massBinLimits):
     # scale = 2.0
     # priors['alpha_1'] = scipy.stats.norm(loc=cprior['a1'], scale=scale)
     # priors['alpha_2'] = scipy.stats.norm(loc=cprior['a2'], scale=scale)
-    priors['alpha'] = scipy.stats.uniform(loc=-4.5, scale=3.0)
+    priors['alpha'] = scipy.stats.uniform(loc=-4.5, scale=4.5)
     # priors['alpha_2'] = scipy.stats.uniform(loc=-1.001, scale=0.002)
     
     priors['D*'] = scipy.stats.uniform(loc = 8., scale = 4.0)
