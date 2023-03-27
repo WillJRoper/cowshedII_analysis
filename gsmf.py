@@ -82,7 +82,7 @@ for s in snap_ints:
     custom_priors[snaps[-1]] = {'phi1':-5.0,'phi2':-5.0,'a1':-2.0,'a2':-1.0}
 
 # Define the normalisation and colormap
-norm = Normalize(vmin=2, vmax=16)
+norm = Normalize(vmin=2, vmax=12)
 cmap = lover
 
 # Set up plot
@@ -93,10 +93,23 @@ ax.grid(True)
 
 # Define mass bins
 massBins, massBinLimits = mass_bins() 
-print(np.log10(massBins))
-print(massBinLimits)
 
 model = models.Schechter()
+
+def yerr(phi,phi_sigma):
+
+    p = phi
+    ps = phi_sigma
+    
+    mask = (ps == p)
+        
+    err_up = np.abs(np.log10(p) - np.log10(p + ps))
+    err_lo = np.abs(np.log10(p) - np.log10(p - ps))
+        
+    err_lo[mask] = 100
+    
+    return err_up, err_lo, mask
+
 
 # Loop over snapshots
 prev_z = None
@@ -131,31 +144,18 @@ for snap in snaps:
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
     hist = np.float64(hist_all)
-    print(hist)
     phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
 
-    if np.sum(hist_all) < 50:
+    if np.sum(hist_all) < 10:
         print("Less than 10 counts")
         continue
+
+    err_up, err_lo, mask = yerr(phi_all, phi_sigma)
     
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
-        
-    ## ---- Get fit
-    sample_ID = 'cowshed50_gsmf_%s' % snap
-    try:
-        a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False)
-    except OSError:
-        continue
-    # from methods import switch_samples
-    # _samples = switch_samples(a.samples)
-    #a = analyse.analyse(ID='samples', model=model, sample_save_ID=sample_ID, verbose=False, samples=_samples)
-
-    plot_df(ax, phi_all, phi_sigma, hist_all, massBins=massBins,
-            color=cmap(norm(z)), lines=False, label='', lw=5)
-    model.update_params(a.median_fit)
     
-    xvals = np.linspace(7,15,1000)
-    ax.plot(xvals, a.model.log10phi(xvals), color=cmap(norm(z)))
+    plot_df(ax, phi_all, phi_sigma, hist, massBins,
+            label="", color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 cbar.set_label("$z$")
