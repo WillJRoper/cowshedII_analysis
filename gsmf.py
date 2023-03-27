@@ -145,7 +145,7 @@ for snap in eagle_snaps:
                                snap,
                                "Subhalo/ApertureMeasurements/Mass/030kpc",
                                noH=True, physicalUnits=True,
-                               numThreads=8)[:, :] * 10 ** 10
+                               numThreads=8)[:, 4] * 10 ** 10
 
     mstar_temp = mass[mass > 0]
 
