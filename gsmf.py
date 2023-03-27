@@ -90,11 +90,12 @@ for s in pre_snaps:
     ind = int(s.split('_')[0])
     snaps[ind] = s
 
+snaps = snaps[snaps != 0]
+
 # Sort EAGLE snapshots
 eagle_snaps = []
 prev_z = 100
 for s in snaps:
-    print(s)
     z = float(s.split('_')[1][1:].replace("p", "."))
     if z < 2.5:
         continue
