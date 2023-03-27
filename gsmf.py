@@ -153,7 +153,7 @@ for snap in snaps:
     print("Plotting:", z)
 
     okinds = phi_all > 0
-    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
+    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)), marker="o")
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 cbar.set_label("$z$")
