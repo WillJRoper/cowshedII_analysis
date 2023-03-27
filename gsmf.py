@@ -141,7 +141,7 @@ for snap in eagle_snaps:
 
     z = float(snap.split('_')[1][1:].replace("p", "."))
     boxsize = np.array([100, 100, 100])
-    mass = eagle_io.read_array("SUBFIND", path,
+    mass = eagle_io.read_array("SUBFIND", ref_path,
                                snap,
                                "Subhalo/ApertureMeasurements/Mass/030kpc",
                                noH=True, physicalUnits=True,
