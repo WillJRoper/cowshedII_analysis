@@ -103,6 +103,7 @@ for s in snaps:
         continue
     if prev_z - z < 1.5:
         continue
+    prev_z = z
     eagle_snaps.append(s)
 
 # Set up snapshot list
