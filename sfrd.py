@@ -26,7 +26,7 @@ def log10phi(D, D_star, log10phi_star, alpha):
     return np.log10(phi)
 
 # Set up snapshot list
-snap_ints = [4, 5, 6]
+snap_ints = [4, 5, 6, 8]
 snaps = []
 for s in snap_ints:
     str_snap_int = "%s" % s
@@ -43,7 +43,7 @@ ax.grid(True)
 ax.loglog()
 
 # Define mass bins
-sfr_bins = np.logspace(-3, 7, 20)
+sfr_bins = np.logspace(-2, 3, 20)
 bin_cents = (sfr_bins[1:] + sfr_bins[:-1]) / 2
 bin_widths = sfr_bins[1:] - sfr_bins[:-1]
 
@@ -120,7 +120,7 @@ for snap in zip(snaps):
     H, _ = np.histogram(sfr, bins=sfr_bins)
 
     # Convert histogram to mass function
-    sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
+    sfrf = H / np.product(boxsize.value) / bin_widths
 
     # # Fit the data
     okinds = H > 0
