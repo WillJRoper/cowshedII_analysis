@@ -26,7 +26,7 @@ def log10phi(D, D_star, log10phi_star, alpha):
     return np.log10(phi)
 
 # Set up snapshot list
-snap_ints = [4, 8, 15, 18]
+snap_ints = [4, 5, 6]
 snaps = []
 for s in snap_ints:
     str_snap_int = "%s" % s
@@ -38,11 +38,10 @@ cmap = lover
 
 # Set up plot
 fig = plt.figure()
-ax1 = fig.add_subplot(221)
-ax2 = fig.add_subplot(222)
-ax3 = fig.add_subplot(223)
-ax4 = fig.add_subplot(224)
-for ax in [ax1, ax2, ax3, ax4]:
+ax1 = fig.add_subplot(131)
+ax2 = fig.add_subplot(132)
+ax3 = fig.add_subplot(133)
+for ax in [ax1, ax2, ax3]:
     ax.grid(True)
     ax.loglog()
 
@@ -51,9 +50,13 @@ sfr_bins = np.logspace(-3, 7, 20)
 bin_cents = (sfr_bins[1:] + sfr_bins[:-1]) / 2
 bin_widths = sfr_bins[1:] - sfr_bins[:-1]
 
+# Define the normalisation and colormap
+norm = Normalize(vmin=2, vmax=12)
+cmap = lover
+
 
 # Loop over snapshots
-for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
+for ax, snap in zip([ax1, ax2, ax3], snaps):
 
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
@@ -121,7 +124,6 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # Convert histogram to mass function
     sfrf = H / np.product(boxsize.value) / np.log10(bin_widths)
-    sigma = np.sqrt(H / np.product(boxsize.value) / np.log10(bin_widths))
 
     # # Fit the data
     okinds = H > 0
@@ -129,8 +131,7 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
 
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
-    ax.scatter(bin_cents[okinds], sfrf[okinds],
-               marker="o")
+    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
 
     ax.text(0.95, 0.05, f'$z={z:.1f}$',
             bbox=dict(boxstyle="round,pad=0.3", fc='w',
