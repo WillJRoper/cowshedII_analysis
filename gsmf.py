@@ -96,7 +96,7 @@ massBins, massBinLimits = mass_bins()
 print(np.log10(massBins))
 print(massBinLimits)
 
-model = models.DoubleSchechter()
+model = models.Schechter()
 
 # Loop over snapshots
 prev_z = None

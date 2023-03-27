@@ -32,21 +32,21 @@ def fitdf(N_up, N, V, mstar_temp, cprior, name, massBinLimits):
     #       "\nN", N,
     #       "\nsigma", obs[0]['sigma'])
 
-    model = models.DoubleSchechter()
+    model = models.Schechter()
 
     priors = {}
 
     # scale = 2.0
     # priors['log10phi*_1'] = scipy.stats.norm(loc=cprior['phi1'], scale=scale)
     # priors['log10phi*_2'] = scipy.stats.norm(loc=cprior['phi2'], scale=scale)
-    priors['log10phi*_1'] = scipy.stats.uniform(loc=-8, scale=6.0)
-    priors['log10phi*_2'] = scipy.stats.uniform(loc=-8, scale=6.0)
+    priors['log10phi*'] = scipy.stats.uniform(loc=-8, scale=6.0)
+    # priors['log10phi*_2'] = scipy.stats.uniform(loc=-8, scale=6.0)
     
     # scale = 2.0
     # priors['alpha_1'] = scipy.stats.norm(loc=cprior['a1'], scale=scale)
     # priors['alpha_2'] = scipy.stats.norm(loc=cprior['a2'], scale=scale)
-    priors['alpha_1'] = scipy.stats.uniform(loc=-4.5, scale=3.0)
-    priors['alpha_2'] = scipy.stats.uniform(loc=-1.001, scale=0.002)
+    priors['alpha'] = scipy.stats.uniform(loc=-4.5, scale=3.0)
+    # priors['alpha_2'] = scipy.stats.uniform(loc=-1.001, scale=0.002)
     
     priors['D*'] = scipy.stats.uniform(loc = 8., scale = 4.0)
  
