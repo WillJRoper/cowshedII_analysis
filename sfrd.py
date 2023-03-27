@@ -131,7 +131,7 @@ for ax, snap in zip([ax1, ax2, ax3], snaps):
 
     # # Plot this line
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
-    ax.plot(bin_cents[okinds], phi_all[okinds], color=cmap(norm(z)))
+    ax.plot(bin_cents[okinds], sfrf[okinds], color=cmap(norm(z)))
 
     ax.text(0.95, 0.05, f'$z={z:.1f}$',
             bbox=dict(boxstyle="round,pad=0.3", fc='w',
