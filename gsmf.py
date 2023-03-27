@@ -20,8 +20,8 @@ import fitDF.analyse as analyse
 
 
 def mass_bins():
-    massBinLimits = np.linspace(7.95, 12.05, 25)
-    massBins = 10 ** ((massBinLimits[1:] + massBinLimits[:-1]) / 2)
+    massBinLimits = np.logspace(7.95, 12.05, 25)
+    massBins = (massBinLimits[1:] + massBinLimits[:-1]) / 2
     return massBins, massBinLimits
 
 def plot_df(ax, phi, phi_sigma, hist, massBins,
@@ -120,7 +120,8 @@ ax.grid(True)
 ax.loglog()
 
 # Define mass bins
-massBins, massBinLimits = mass_bins() 
+massBins, massBinLimits = mass_bins()
+bin_width = massBinLimits[1:] - massBinLimits[:-1]
 
 def yerr(phi,phi_sigma):
 
@@ -153,9 +154,9 @@ for snap in eagle_snaps:
 
     V = np.product(boxsize)
 
-    hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
+    hist_all, _ = np.histogram(mstar_temp, bins=massBinLimits)
     hist = np.float64(hist_all)
-    phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
+    phi_all = (hist / V) / bin_width
 
     if np.sum(hist_all) < 10:
         print("Less than 10 counts")
@@ -174,7 +175,8 @@ for snap in snaps:
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
     z = sim_data.metadata.redshift
-    boxsize = sim_data.metadata.boxsize
+    boxsize = np.array([50, 50, 50])
+    print(boxsize)
 
     if prev_z != None:
         if prev_z - z < 0.5:
@@ -196,11 +198,11 @@ for snap in snaps:
     if mstar_temp.size == 0:
         continue
 
-    V = np.product(boxsize.value)
+    V = np.product(boxsize)
 
-    hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
+    hist_all, _ = np.histogram(mstar_temp, bins=massBinLimits)
     hist = np.float64(hist_all)
-    phi_all = (hist / V) / (massBinLimits[1] - massBinLimits[0])
+    phi_all = (hist / V) / bin_width
 
     if np.sum(hist_all) < 10:
         print("Less than 10 counts")
