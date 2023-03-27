@@ -93,7 +93,7 @@ for s in pre_snaps:
         continue
     if z > 12:
         continue
-    if prev_z - z < 0.5:
+    if prev_z - z < 1.5:
         continue
     eagle_snaps.append(s)
 
@@ -178,7 +178,7 @@ for snap in snaps:
     boxsize = np.array([50, 50, 50])
 
     if prev_z != None:
-        if prev_z - z < 0.5:
+        if prev_z - z < 1.5:
             continue
 
     prev_z = z

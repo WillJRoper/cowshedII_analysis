@@ -88,7 +88,8 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     gal_ids = np.array(list(range(ngal)))
     gal_ids = gal_ids[stellar_mass > 10 ** 8]
 
-    print("There are %d galaxies above mass threshold" % gal_ids.size)
+    print("There are %d galaxies above mass threshold (out of %d" %
+          (gal_ids.size, ngal))
 
     def calc_sfr(i):
 
