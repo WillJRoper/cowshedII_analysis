@@ -22,8 +22,6 @@ def mass_bins():
     massBinLimits = np.linspace(7.95, 13.35, 28)
     massBins = np.logspace(8.05, 13.25, 27)
     return massBins, massBinLimits
-
-massBins, massBinLimits = mass_bins()
 # print(np.log10(massBins))
 # print(massBinLimits)
 
@@ -103,6 +101,8 @@ def fit(tag, prev_z):
     halo_data.masses.mass_star.convert_to_units("msun")
     stellar_mass = halo_data.masses.mass_star
     mstar_temp = stellar_mass[stellar_mass > 0]
+
+    massBins, massBinLimits = mass_bins()
 
     if mstar_temp.size == 0:
         return
