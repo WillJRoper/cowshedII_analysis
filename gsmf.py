@@ -213,7 +213,7 @@ for snap in snaps:
 
 legend_elements1 = [Line2D([0], [0], color='k',
                            label="COWSHED 50 Mpc",
-                           linestyle="-", marker="0"),
+                           linestyle="-", marker="o"),
                     Line2D([0], [0], color='k',
                            label="EAGLE 100 Mpc",
                            linestyle="dotted", marker="^"),
