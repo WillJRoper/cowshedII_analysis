@@ -25,7 +25,7 @@ def mass_bins():
 # print(np.log10(massBins))
 # print(massBinLimits)
 
-def fitdf(N_up, N, V, mstar_temp, cprior, name):
+def fitdf(N_up, N, V, mstar_temp, cprior, name, massBinLimits):
 
     obs = [{'bin_edges': massBinLimits, 'N': N_up, 'volume': V, 'sigma': N_up / np.sqrt(N)}] 
     # print("upscaled N", N_up,
@@ -136,7 +136,8 @@ def fit(tag, prev_z):
 
     print(hist_all)
 
-    fitdf(N, hist_all, V, mstar_temp, cprior=custom_priors[tag], name=sample_ID)
+    fitdf(N, hist_all, V, mstar_temp, cprior=custom_priors[tag], name=sample_ID,
+          massBinLimits=massBinLimits)
     print(sample_ID, "fit done?")
    
     # ## Ref ##
