@@ -101,7 +101,7 @@ for s in snaps:
         continue
     if z > 12:
         continue
-    if prev_z - z < 1.5:
+    if prev_z - z < 1.0:
         continue
     prev_z = z
     eagle_snaps.append(s)
@@ -171,7 +171,7 @@ for snap in eagle_snaps:
         print("Less than 10 counts")
         continue
 
-    print("Plotting:", z)
+    print("Plotting:", snap, z)
 
     okinds = phi_all > 0
     ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)),
@@ -187,7 +187,7 @@ for snap in snaps:
     boxsize = np.array([50, 50, 50])
 
     if prev_z != None:
-        if prev_z - z < 1.5:
+        if prev_z - z < 1.0:
             continue
 
     prev_z = z
@@ -216,7 +216,7 @@ for snap in snaps:
         print("Less than 10 counts")
         continue
 
-    print("Plotting:", z)
+    print("Plotting:", snap, z)
 
     okinds = phi_all > 0
     ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
