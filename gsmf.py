@@ -89,7 +89,7 @@ cmap = lover
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.grid(True)
-# ax.loglog()
+ax.loglog()
 
 # Define mass bins
 massBins, massBinLimits = mass_bins() 
@@ -153,9 +153,9 @@ for snap in snaps:
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
 
     err_up, err_lo, mask = yerr(phi_all, phi_sigma)
-    
-    plot_df(ax, phi_all, phi_sigma, hist, massBins,
-            label="", color=cmap(norm(z)))
+
+    okinds = phi_all > 0
+    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
 cbar.set_label("$z$")
