@@ -86,7 +86,7 @@ for snap in zip(snaps):
 
     # Define galaxy ids.
     gal_ids = np.array(list(range(ngal)))
-    gal_ids = gal_ids[stellar_mass > 10 ** 8]
+    gal_ids = gal_ids[stellar_mass > 0]
 
     print("There are %d galaxies above mass threshold (out of %d" %
           (gal_ids.size, ngal))
