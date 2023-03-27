@@ -149,10 +149,10 @@ for snap in snaps:
     if np.sum(hist_all) < 10:
         print("Less than 10 counts")
         continue
-
-    err_up, err_lo, mask = yerr(phi_all, phi_sigma)
     
     phi_sigma = (np.sqrt(hist) / V) / (massBinLimits[1] - massBinLimits[0])
+
+    err_up, err_lo, mask = yerr(phi_all, phi_sigma)
     
     plot_df(ax, phi_all, phi_sigma, hist, massBins,
             label="", color=cmap(norm(z)))
