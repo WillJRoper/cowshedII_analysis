@@ -87,6 +87,7 @@ pre_snaps = ['000_z020p000', '003_z008p988', '006_z005p971', '009_z004p485',
 eagle_snaps = []
 prev_z = 100
 for s in pre_snaps:
+    print(s)
     ind = int(s.split('_')[0])
     z = float(s.split('_')[1][1:].replace("p", "."))
     if z < 2.5:
@@ -138,7 +139,7 @@ def yerr(phi,phi_sigma):
 
 for snap in eagle_snaps:
 
-    z = float(s.split('_')[1][1:].replace("p", "."))
+    z = float(snap.split('_')[1][1:].replace("p", "."))
     boxsize = np.array([100, 100, 100])
     mass = eagle_io.read_array("SUBFIND", path,
                                snap,
