@@ -165,7 +165,7 @@ for snap in eagle_snaps:
     print("Plotting:", z)
 
     okinds = phi_all > 0
-    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)), marker="^",
+    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)),
             linestyle="dotted")
 
 # Loop over snapshots
@@ -176,7 +176,6 @@ for snap in snaps:
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
     z = sim_data.metadata.redshift
     boxsize = np.array([50, 50, 50])
-    print(boxsize)
 
     if prev_z != None:
         if prev_z - z < 0.5:
@@ -211,14 +210,14 @@ for snap in snaps:
     print("Plotting:", z)
 
     okinds = phi_all > 0
-    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)), marker="o")
+    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
 
 legend_elements1 = [Line2D([0], [0], color='k',
                            label="COWSHED 50 Mpc",
-                           linestyle="-", marker="o"),
+                           linestyle="-"),
                     Line2D([0], [0], color='k',
                            label="EAGLE 100 Mpc",
-                           linestyle="dotted", marker="^"),
+                           linestyle="dotted"),
                     ]
 
 cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
