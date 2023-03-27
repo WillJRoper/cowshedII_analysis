@@ -74,11 +74,21 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
     halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
     ngal = halo_data.star_formation_rate.sfr_gas.size
 
+    # Extract masses
+    halo_data.masses.mass_star.convert_to_units("msun")
+    stellar_mass = halo_data.masses.mass_star
+
     # Define the redshift limit for the SFR bin_cents
     z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
                         zmin=-1, zmax=127)
 
     print(z, z_high, cosmo.age(z), cosmo.age(z_high))
+
+    # Define galaxy ids.
+    gal_ids = np.array(list(range(ngal)))
+    gal_ids = gal_ids[stellar_mass > 10 ** 8]
+
+    print("There are %d galaxies above mass threshold" % gal_ids.size)
 
     def calc_sfr(i):
 
@@ -98,11 +108,10 @@ for ax, snap in zip([ax1, ax2, ax3, ax4], snaps):
         okinds = zs > z_high
         return np.sum(ms[okinds]) / (100 * 10 ** 6)
     
-    with MultiPool() as pool:
-        sfrs = list(pool.map(calc_sfr, list(range(ngal))))
+    with MultiPool(int(sys.argv[1])) as pool:
+        sfrs = list(pool.map(calc_sfr, gal_ids))
 
     sfr = np.array(sfrs)
-    print(sfr.shape)
 
     print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
