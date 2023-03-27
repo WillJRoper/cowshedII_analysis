@@ -38,12 +38,9 @@ cmap = lover
 
 # Set up plot
 fig = plt.figure()
-ax1 = fig.add_subplot(131)
-ax2 = fig.add_subplot(132)
-ax3 = fig.add_subplot(133)
-for ax in [ax1, ax2, ax3]:
-    ax.grid(True)
-    ax.loglog()
+ax = fig.add_subplot(111)
+ax.grid(True)
+ax.loglog()
 
 # Define mass bins
 sfr_bins = np.logspace(-3, 7, 20)
@@ -56,7 +53,7 @@ cmap = lover
 
 
 # Loop over snapshots
-for ax, snap in zip([ax1, ax2, ax3], snaps):
+for snap in zip(snaps):
 
     # Load swiftsimio dataset to get volume and redshift
     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
@@ -133,11 +130,11 @@ for ax, snap in zip([ax1, ax2, ax3], snaps):
     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
     ax.plot(bin_cents[okinds], sfrf[okinds], color=cmap(norm(z)))
 
-    ax.text(0.95, 0.05, f'$z={z:.1f}$',
-            bbox=dict(boxstyle="round,pad=0.3", fc='w',
-                      ec="k", lw=1, alpha=0.8),
-            transform=ax.transAxes, horizontalalignment='right',
-            fontsize=8)
+    # ax.text(0.95, 0.05, f'$z={z:.1f}$',
+    #         bbox=dict(boxstyle="round,pad=0.3", fc='w',
+    #                   ec="k", lw=1, alpha=0.8),
+    #         transform=ax.transAxes, horizontalalignment='right',
+    #         fontsize=8)
 
 ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
 ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
