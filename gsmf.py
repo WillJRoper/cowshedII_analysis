@@ -152,7 +152,7 @@ for snap in eagle_snaps:
     if mstar_temp.size == 0:
         continue
 
-    V = np.product(boxsize.value)
+    V = np.product(boxsize)
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
     hist = np.float64(hist_all)
