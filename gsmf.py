@@ -84,9 +84,15 @@ pre_snaps = ['000_z020p000', '002_z009p993', '003_z008p988', '006_z005p971', '00
              '026_z000p183']
 
 # Sort EAGLE snapshots
+snaps = np.zeros(len(pre_snaps), dtype=object)
+for s in pre_snaps:
+    ind = int(s.split('_')[0])
+    snaps[ind] = s
+
+# Sort EAGLE snapshots
 eagle_snaps = []
 prev_z = 100
-for s in pre_snaps:
+for s in snaps:
     ind = int(s.split('_')[0])
     z = float(s.split('_')[1][1:].replace("p", "."))
     if z < 2.5:
