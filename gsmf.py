@@ -20,7 +20,7 @@ import fitDF.analyse as analyse
 
 
 def mass_bins():
-    massBinLimits = np.linspace(7.95, 12.05, 20)
+    massBinLimits = np.linspace(7.95, 12.05, 25)
     massBins = 10 ** ((massBinLimits[1:] + massBinLimits[:-1]) / 2)
     return massBins, massBinLimits
 
