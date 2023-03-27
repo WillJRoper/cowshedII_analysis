@@ -110,7 +110,6 @@ def fit(tag, prev_z):
     V = np.product(boxsize.value)
 
     hist_all, _ = np.histogram(np.log10(mstar_temp), bins=massBinLimits)
-    print(hist_all)
     phi_all = (hist_all / V) / (massBinLimits[1] - massBinLimits[0])
 
     if np.sum(hist_all) < 50:
@@ -122,8 +121,20 @@ def fit(tag, prev_z):
     ## ---- Get fit
     sample_ID = 'cowshed50_gsmf_%s' % snap
 
+    # Mask out 0s
+    okinds = hist_all > 0
+    binlim_okinds = np.zeros(hist_all.size + 1)
+    binlim_okinds[0] = 1
+    binlim_okinds[1:][okinds] = 1
+    hist_all = hist_all[okinds]
+    phi_all = phi_all[okinds]
+    massBinLimits = massBinLimits[binlim_okinds]
+    massBins = massBins[okinds]
+    
     V = 50 ** 3
     N = models.phi_to_N(phi_all, V, massBinLimits)
+
+    print(hist_all)
 
     fitdf(N, hist_all, V, mstar_temp, cprior=custom_priors[tag], name=sample_ID)
     print(sample_ID, "fit done?")
