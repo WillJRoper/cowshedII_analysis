@@ -74,7 +74,7 @@ def plot_df(ax, phi, phi_sigma, hist, massBins,
 
     
 # Define EAGLE snapshots
-pre_snaps = ['000_z020p000', '003_z008p988', '006_z005p971', '009_z004p485',
+pre_snaps = ['000_z020p000', '002_z009p993', '003_z008p988', '006_z005p971', '009_z004p485',
              '012_z003p017', '015_z002p012', '018_z001p259', '021_z000p736',
              '024_z000p366', '027_z000p101', '001_z015p132', '004_z008p075',
              '007_z005p487', '010_z003p984', '013_z002p478', '016_z001p737',
@@ -87,7 +87,6 @@ pre_snaps = ['000_z020p000', '003_z008p988', '006_z005p971', '009_z004p485',
 eagle_snaps = []
 prev_z = 100
 for s in pre_snaps:
-    print(s)
     ind = int(s.split('_')[0])
     z = float(s.split('_')[1][1:].replace("p", "."))
     if z < 2.5:
