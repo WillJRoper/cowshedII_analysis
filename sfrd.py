@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
 from scipy.optimize import curve_fit
-from swiftascmaps import lover
+from swiftascmaps import nineteen_eighty_nine
 from velociraptor.swift.swift import to_swiftsimio_dataset
 from velociraptor.particles import load_groups
 from swiftgalaxy import SWIFTGalaxy, Velociraptor
@@ -93,8 +93,8 @@ for s in snap_ints:
     snaps.append(str_snap_int.zfill(4))
 
 # Define the normalisation and colormap
-norm = Normalize(vmin=2, vmax=16)
-cmap = lover
+norm = Normalize(vmin=6, vmax=13)
+cmap = nineteen_eighty_nine
 
 # Set up plot
 fig = plt.figure()
@@ -219,6 +219,9 @@ ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
 ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
 
 ax.legend(handles=legend_elements1, loc="upper right")
+
+cbar = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)
+cbar.set_label("$z$")
 
 # ax.legend()
 
