@@ -211,8 +211,8 @@ for study in obs:
     for z in obs[study]:
         for lst in obs[study][z]:
 
-            ax.errorbar(lst[-3], lst[2], xerr=[lst[-2], lst[-1]],
-                        yerr=[lst[3], lst[4]], linestyle="none",
+            ax.errorbar(lst[-3], lst[2], xerr=np.array([[lst[-2], lst[-1]]]),
+                        yerr=np.array([[lst[3], lst[4]]]), linestyle="none",
                         marker=markers[study], color=cmap(norm(z)))
 
 ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
