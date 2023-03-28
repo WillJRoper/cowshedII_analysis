@@ -112,89 +112,89 @@ norm = Normalize(vmin=2, vmax=12)
 cmap = lover
 
 
-# Loop over snapshots
-for snap in zip(snaps):
+# # Loop over snapshots
+# for snap in zip(snaps):
 
-    # Load swiftsimio dataset to get volume and redshift
-    sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
-    z = sim_data.metadata.redshift
-    boxsize = sim_data.metadata.boxsize
+#     # Load swiftsimio dataset to get volume and redshift
+#     sim_data = simload("../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap)
+#     z = sim_data.metadata.redshift
+#     boxsize = sim_data.metadata.boxsize
 
-    # Load halos
-    try:
-        halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties" % snap)
-        groups = load_groups(
-            "../EAGLE_50/galaxies/cowshed50_%s.catalog_groups" % snap,
-            catalogue=halo_data
-        )
-    except OSError:
-        continue
+#     # Load halos
+#     try:
+#         halo_data = load("../EAGLE_50/galaxies/cowshed50_%s.properties" % snap)
+#         groups = load_groups(
+#             "../EAGLE_50/galaxies/cowshed50_%s.catalog_groups" % snap,
+#             catalogue=halo_data
+#         )
+#     except OSError:
+#         continue
 
-    # Extract sfrs
-    halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
-    ngal = halo_data.star_formation_rate.sfr_gas.size
+#     # Extract sfrs
+#     halo_data.star_formation_rate.sfr_gas.convert_to_units("Msun/yr")
+#     ngal = halo_data.star_formation_rate.sfr_gas.size
 
-    # Extract masses
-    halo_data.masses.mass_star.convert_to_units("msun")
-    stellar_mass = halo_data.masses.mass_star
+#     # Extract masses
+#     halo_data.masses.mass_star.convert_to_units("msun")
+#     stellar_mass = halo_data.masses.mass_star
 
-    # Define the redshift limit for the SFR bin_cents
-    z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
-                        zmin=-1, zmax=127)
+#     # Define the redshift limit for the SFR bin_cents
+#     z_high = z_at_value(cosmo.age, cosmo.age(z) - 100 * u.Myr,
+#                         zmin=-1, zmax=127)
 
-    print(z, z_high, cosmo.age(z), cosmo.age(z_high))
+#     print(z, z_high, cosmo.age(z), cosmo.age(z_high))
 
-    # Define galaxy ids.
-    gal_ids = np.array(list(range(ngal)))
-    gal_ids = gal_ids[stellar_mass > 10**7.5]
+#     # Define galaxy ids.
+#     gal_ids = np.array(list(range(ngal)))
+#     gal_ids = gal_ids[stellar_mass > 10**7.5]
 
-    print("There are %d galaxies above mass threshold (out of %d" %
-          (gal_ids.size, ngal))
+#     print("There are %d galaxies above mass threshold (out of %d" %
+#           (gal_ids.size, ngal))
 
-    def calc_sfr(i):
+#     def calc_sfr(i):
 
-        sg = SWIFTGalaxy(
-            "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
-            Velociraptor(
-                "../EAGLE_50/galaxies/cowshed50_%s" % snap,
-                halo_index=i
-            )
-        )
+#         sg = SWIFTGalaxy(
+#             "../EAGLE_50/snapshots/fb1p0/cowshed50_%s.hdf5" % snap,
+#             Velociraptor(
+#                 "../EAGLE_50/galaxies/cowshed50_%s" % snap,
+#                 halo_index=i
+#             )
+#         )
 
-        # Get redshift of stellar birth
-        zs = (1 / sg.stars.birth_scale_factors.value) - 1
-        ms = sg.stars.masses.value * 10 ** 10
+#         # Get redshift of stellar birth
+#         zs = (1 / sg.stars.birth_scale_factors.value) - 1
+#         ms = sg.stars.masses.value * 10 ** 10
 
-        # Get only particles formed in bin_cents
-        okinds = zs > z_high
-        return np.sum(ms[okinds]) / (100 * 10 ** 6)
+#         # Get only particles formed in bin_cents
+#         okinds = zs > z_high
+#         return np.sum(ms[okinds]) / (100 * 10 ** 6)
     
-    with MultiPool(int(sys.argv[1])) as pool:
-        sfrs = list(pool.map(calc_sfr, gal_ids))
+#     with MultiPool(int(sys.argv[1])) as pool:
+#         sfrs = list(pool.map(calc_sfr, gal_ids))
 
-    sfr = np.array(sfrs)
+#     sfr = np.array(sfrs)
 
-    print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
+#     print(z, boxsize, np.log10(np.min(sfr)), np.log10(np.max(sfr)))
 
-    # Histogram these masses
-    H, _ = np.histogram(sfr, bins=sfr_bins)
+#     # Histogram these masses
+#     H, _ = np.histogram(sfr, bins=sfr_bins)
 
-    # Convert histogram to mass function
-    sfrf = H / np.product(boxsize.value) / bin_widths
+#     # Convert histogram to mass function
+#     sfrf = H / np.product(boxsize.value) / bin_widths
 
-    # # Fit the data
-    okinds = H > 0
-    # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], po=[10, 10, 1])
+#     # # Fit the data
+#     okinds = H > 0
+#     # popt, pcov = curve_fit(log10phi, bin_cents[okinds], gsmf[okinds], po=[10, 10, 1])
 
-    # # Plot this line
-    # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
-    ax.plot(bin_cents[okinds], sfrf[okinds], color=cmap(norm(z)))
+#     # # Plot this line
+#     # xs = np.linspace(sfr_bins.min(), sfr_bins.max(), 1000)
+#     ax.plot(bin_cents[okinds], sfrf[okinds], color=cmap(norm(z)))
 
-    # ax.text(0.95, 0.05, f'$z={z:.1f}$',
-    #         bbox=dict(boxstyle="round,pad=0.3", fc='w',
-    #                   ec="k", lw=1, alpha=0.8),
-    #         transform=ax.transAxes, horizontalalignment='right',
-    #         fontsize=8)
+#     # ax.text(0.95, 0.05, f'$z={z:.1f}$',
+#     #         bbox=dict(boxstyle="round,pad=0.3", fc='w',
+#     #                   ec="k", lw=1, alpha=0.8),
+#     #         transform=ax.transAxes, horizontalalignment='right',
+#     #         fontsize=8)
 
 legend_elements1 = [Line2D([0], [0], color='k',
                            label="COWSHED 50 Mpc",
@@ -211,8 +211,8 @@ for study in obs:
     for z in obs[study]:
         for lst in obs[study][z]:
 
-            ax.errorbar(lst[-3], lst[2], xerr=np.array([[lst[-2], lst[-1]]]),
-                        yerr=np.array([[lst[3], lst[4]]]), linestyle="none",
+            ax.errorbar(lst[-3], lst[2], xerr=np.array([[lst[-2]], [lst[-1]]]),
+                        yerr=np.array([[lst[3]], [lst[4]]]), linestyle="none",
                         marker=markers[study], color=cmap(norm(z)))
 
 ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
