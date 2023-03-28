@@ -127,7 +127,7 @@ legend_elements1 = [Line2D([0], [0], color='k',
                     Line2D([0], [0], color='k',
                            label="EAGLE 100 Mpc",
                            linestyle="dotted"),
-                    Line2D([0], [0], color='k',
+                    Line2D([0], [0], color='grey',
                            label="Madau & Dickinson (2014)",
                            linestyle="dashdot"),
                     ]
@@ -145,7 +145,7 @@ legend_elements2 = [Line2D([0], [0], color='mediumpurple',
 
 # Plot the fit
 okinds = bin_cents <= 8
-ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="yellowgreen",
+ax.plot(bin_cents[okinds], fit(bin_cents[okinds]), color="grey",
         linestyle="dashdot")
 
 # Label axes
