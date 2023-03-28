@@ -16,14 +16,74 @@ from velociraptor.swift.swift import to_swiftsimio_dataset
 from velociraptor.particles import load_groups
 from swiftgalaxy import SWIFTGalaxy, Velociraptor
 from schwimmbad import MultiPool
+from unyt import c, h, nJy, erg, s, Hz, pc, angstrom, eV, Msun, yr
 
 
-def log10phi(D, D_star, log10phi_star, alpha):
+tenpc = 10*pc  # ten parsecs
+# the surface area (in cm) at 10 pc. I HATE the magnitude system
+geo = 4*np.pi*(tenpc.to('cm').value)**2
 
-    y = D - D_star
-    phi = np.log(10) * 10 ** log10phi_star * np.exp(-10**y) * 10 ** (y * (alpha + 1))
-    
-    return np.log10(phi)
+def M_to_Lnu(M):
+    """ Convert absolute magnitude (M) to L_nu """
+    return 10**(-0.4 * (M + 48.6)) * geo * erg / s / Hz
+
+def lnu_to_sfr(lnu):
+   """
+   L1500 = SFR x (7.1e-29 Msun^-1 yr^-1 erg^-1 s Hz)
+   This if from a paper by Pratika Dayal (Dayal+2022, REBELs paper) 
+   """
+   return lnu * (7.1 * 10 ** -29 * Msun * yr**-1 * erg**-1 * s * Hz)
+   
+# Define observational data
+# (format -> {z: [M deltaM phi phi_err_low phi_err_upp]})
+obs = {}
+obs["Donnan+2022"] = {8: [[-22.17, 1.0, 0.63E-6, 0.32E-6, 0.32E-6],
+                          [-21.42, 0.5, 3.92E-6, 1.63E-6, 1.63E-6]],
+                      9: [[-22.30, 1.0, 0.17E-6, 0.17E-6, 0.17E-6],
+                          [-21.30, 1.0, 3.02E-6, 2.74E-6, 2.74E-6],
+                          [-18.50, 1.0, 1200E-6, 537E-6, 537E-6]],
+                      10.5: [[-22.57, 1.0, 0.18E-6, 0.18E-6, 0.18E-6],
+                             [-20.10, 1.0, 16.2E-6, 11.5E-6, 11.5E-6],
+                             [-19.35, 0.5, 136.0E-6, 48.2E-6, 48.2E-6],
+                             [-18.85, 0.5, 234.9E-6, 100.5E-6, 100.5E-6],
+                             [-18.23, 0.75, 630.8E-6, 448.2E-6, 448.2E-6]]}
+obs["Bouwens+2022"] = {8.5: [[-20.02, 1.25, 0.000164, 0.000162, 0.000162],
+                             [-18.77, 1.25, 0.000378, 0.000306, 0.000306]],
+                       10.5: [[-18.65, 1.0, 0.000290, 0.000238, 0.000238]],
+                       12.5: [[-20.31, 1.0, 0.000116, 0.000094, 0.000094],
+                              [-19.31, 1.0, 0.000190, 0.000152, 0.000152]]}
+
+markers = {"Donnan+2022": "s", "Bouwens+2022": "^"}
+
+# Convert the magnitudes
+for study in obs:
+    for key in obs[study]:
+        for lst in obs[study][key]:
+            mag = lst[0]
+            mag_err = lst[1]
+            mag_high = mag - mag_err
+            mag_low = mag + mag_err
+            
+            lum = M_to_Lnu(mag)
+            lum_low = M_to_Lnu(mag_low)
+            lum_high = M_to_Lnu(mag_high)
+
+            print(lum)
+            
+            sfr = lnu_to_sfr(lum)
+            sfr.convert_to_units("Msun/yr")
+            sfr_low = lnu_to_sfr(lum_low)
+            sfr_low.convert_to_units("Msun/yr")
+            sfr_high = lnu_to_sfr(lum_high)
+            sfr_high.convert_to_units("Msun/yr")
+            sfr_err_low = sfr - sfr_low
+            sfr_err_high = sfr_high - sfr
+
+            lst.append(sfr.value)
+            lst.append(sfr_err_low.value)
+            lst.append(sfr_err_high.value)
+        
+            print(sfr, sfr_err_low, sfr_err_high)
 
 # Set up snapshot list
 snap_ints = [4, 5, 6, 8]
@@ -136,8 +196,29 @@ for snap in zip(snaps):
     #         transform=ax.transAxes, horizontalalignment='right',
     #         fontsize=8)
 
+legend_elements1 = [Line2D([0], [0], color='k',
+                           label="COWSHED 50 Mpc",
+                           linestyle="-"),
+                    ]
+    
+# Plot the observations
+for study in obs:
+
+    legend_elements1.append(Line2D([0], [0], color='k',
+                                   label=study, linestyle="none",
+                                   marker=markers[study]))
+    
+    for z in obs[study]:
+        for lst in obs[study][z]:
+
+            ax.errorbar(lst[-3], lst[2], xerr=[lst[-2], lst[-1]],
+                        yerr=[lst[3], lst[4]], linestyle="none",
+                        marker=markers[study], color=cmap(norm(z)))
+
 ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
 ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
+
+ax.legend(handles=legend_elements1, loc="upper right")
 
 # ax.legend()
 
