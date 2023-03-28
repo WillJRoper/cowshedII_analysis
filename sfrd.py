@@ -107,10 +107,6 @@ sfr_bins = np.logspace(-3, 2, 40)
 bin_cents = (sfr_bins[1:] + sfr_bins[:-1]) / 2
 bin_widths = sfr_bins[1:] - sfr_bins[:-1]
 
-# Define the normalisation and colormap
-norm = Normalize(vmin=2, vmax=12)
-cmap = lover
-
 
 # Loop over snapshots
 for snap in zip(snaps):
