@@ -165,10 +165,14 @@ for snap in eagle_snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    massBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+    try:
+        massBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
                                                 10**7.95 * Msun,
                                                 10**12.05 * Msun, box_volume=V,
                                                 n_bins=25)
+    except AssertionError:
+        print(mstar_temp * Msun)
+        continue
 
     if np.sum(phi_all) == 0:
         print("Less than 10 counts")
