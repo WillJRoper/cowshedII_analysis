@@ -165,8 +165,9 @@ for snap in eagle_snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun, 10**7.95,
-                                                10**12.05, box_volume=V,
+    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+                                                10**7.95 * Msun,
+                                                10**12.05 * Msun, box_volume=V,
                                                 n_bins=25)
 
     if np.sum(hist_all) < 10:
@@ -209,8 +210,10 @@ for snap in snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun, 10**7.95,
-                                                10**12.05, box_volume=V,
+    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+                                                10**7.95 * Msun,
+                                                10**12.05 * Msun,
+                                                box_volume=V,
                                                 n_bins=25)
 
     if np.sum(hist_all) < 10:
