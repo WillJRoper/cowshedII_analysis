@@ -165,7 +165,7 @@ for snap in eagle_snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+    massBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
                                                 10**7.95 * Msun,
                                                 10**12.05 * Msun, box_volume=V,
                                                 n_bins=25)
@@ -210,7 +210,7 @@ for snap in snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+    massBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
                                                 10**7.95 * Msun,
                                                 10**12.05 * Msun,
                                                 box_volume=V,
@@ -222,8 +222,7 @@ for snap in snaps:
 
     print("Plotting:", snap, z)
 
-    okinds = phi_all > 0
-    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)))
+    ax.plot(massBins, phi_all, color=cmap(norm(z)))
 
 legend_elements1 = [Line2D([0], [0], color='k',
                            label="COWSHED 50 Mpc",
