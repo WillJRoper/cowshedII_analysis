@@ -206,7 +206,7 @@ for snap in snaps:
 
     # Extract masses
     halo_data.masses.mass_star.convert_to_units("msun")
-    stellar_mass = halo_data.masses.mass_star
+    stellar_mass = halo_data.masses.mass_star.value
     mstar_temp = stellar_mass[stellar_mass > 0]
 
     if mstar_temp.size == 0:
@@ -215,13 +215,13 @@ for snap in snaps:
     V = np.product(boxsize) * Mpc**3
 
     try:
-        massBins, phi_all, _ = create_mass_function(mstar_temp,
-                                                10**7.95 * Msun,
-                                                10**12.05 * Msun,
-                                                box_volume=V,
-                                                n_bins=25)
+        massBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+                                                    10**7.95 * Msun,
+                                                    10**12.05 * Msun,
+                                                    box_volume=V,
+                                                    n_bins=25)
     except AssertionError:
-        print(mstar_temp)
+        print(mstar_temp * Msun, 10**7.95 * Msun, 10**12.05 * Msun)
         continue
 
     if np.sum(phi_all) == 0:
