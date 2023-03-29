@@ -12,6 +12,8 @@ import eagle_IO.eagle_IO as eagle_io
 from velociraptor import load
 from scipy.optimize import curve_fit
 from swiftascmaps import lover
+from velociraptor.tools import create_mass_function
+from unyt import Msun, Mpc
 
 
 import fitDF.fitDF as fitDF
@@ -161,11 +163,11 @@ for snap in eagle_snaps:
     if mstar_temp.size == 0:
         continue
 
-    V = np.product(boxsize)
+    V = np.product(boxsize) * Mpc**3
 
-    hist_all, _ = np.histogram(mstar_temp, bins=massBinLimits)
-    hist = np.float64(hist_all)
-    phi_all = (hist / V) / bin_width
+    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun, 10**7.95,
+                                                10**12.05, box_volume=V,
+                                                n_bins=25)
 
     if np.sum(hist_all) < 10:
         print("Less than 10 counts")
@@ -173,8 +175,7 @@ for snap in eagle_snaps:
 
     print("Plotting:", snap, z)
 
-    okinds = phi_all > 0
-    ax.plot(massBins[okinds], phi_all[okinds], color=cmap(norm(z)),
+    ax.plot(massBins, phi_all, color=cmap(norm(z)),
             linestyle="dotted")
 
 # Loop over snapshots
@@ -206,11 +207,11 @@ for snap in snaps:
     if mstar_temp.size == 0:
         continue
 
-    V = np.product(boxsize)
+    V = np.product(boxsize) * Mpc**3
 
-    hist_all, _ = np.histogram(mstar_temp, bins=massBinLimits)
-    hist = np.float64(hist_all)
-    phi_all = (hist / V) / bin_width
+    maxxBins, phi_all, _ = create_mass_function(mstar_temp * Msun, 10**7.95,
+                                                10**12.05, box_volume=V,
+                                                n_bins=25)
 
     if np.sum(hist_all) < 10:
         print("Less than 10 counts")
@@ -237,6 +238,6 @@ ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
 
 ax.legend(handles=legend_elements1, loc="upper right")
 
-fig.savefig("../plots/gsmf.png", bbox_inches="tight", dpi=100)
+fig.savefig("../plots/gsmf.pdf", bbox_inches="tight", dpi=100)
 
 plt.close(fig)

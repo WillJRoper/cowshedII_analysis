@@ -159,6 +159,6 @@ ax.legend(handles=legend_elements1,
           loc='lower left')
 ax.add_artist(first_legend)
 
-fig.savefig("../plots/csfrd.png", bbox_inches="tight", dpi=100)
+fig.savefig("../plots/csfrd.pdf", bbox_inches="tight", dpi=100)
 
 plt.close(fig)

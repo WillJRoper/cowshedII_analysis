@@ -212,7 +212,7 @@ for study in obs:
                         marker=markers[study], color=cmap(norm(z)))
 
 ax.set_xlabel("$\mathrm{SFR}_{100}/\mathrm{M}_\odot \mathrm{yr}^{-1}$")
-ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{dex}^{-1}]$")
+ax.set_ylabel("$\phi / [\mathrm{cMpc}^{-3} \mathrm{M}_\odot^{-1} \mathrm{yr}]$")
 
 ax.legend(handles=legend_elements1, loc="upper right")
 
@@ -221,6 +221,6 @@ cbar.set_label("$z$")
 
 # ax.legend()
 
-fig.savefig("../plots/sfrf.png", bbox_inches="tight", dpi=100)
+fig.savefig("../plots/sfrf.pdf", bbox_inches="tight", dpi=100)
 
 plt.close(fig)
