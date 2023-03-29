@@ -66,13 +66,13 @@ for path in paths:
         c = "mediumpurple"
     else:
         csfrd = sfr / (50 ** 3)
-        c = "darkorange"
+        c = "red"
 
     # Get the right color
     if "1p0" in path:
         c = "mediumpurple"
     elif "0p5" in path:
-        c = "darkorange"
+        c = "red"
     else:
         c = "yellowgreen"
 
@@ -134,7 +134,7 @@ legend_elements1 = [Line2D([0], [0], color='k',
 legend_elements2 = [Line2D([0], [0], color='mediumpurple',
                            label="$f_\mathrm{bov}= 1.0$",
                            linestyle="-"),
-                    Line2D([0], [0], color='darkorange',
+                    Line2D([0], [0], color='red',
                            label="$f_\mathrm{bov}= 0.5$",
                            linestyle="-"),
                     Line2D([0], [0], color='yellowgreen',
