@@ -214,7 +214,7 @@ for snap in snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    massBins, phi_all, _ = create_mass_function(mstar_temp * Msun,
+    massBins, phi_all, _ = create_mass_function(mstar_temp,
                                                 10**7.95 * Msun,
                                                 10**12.05 * Msun,
                                                 box_volume=V,
