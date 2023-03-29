@@ -230,6 +230,8 @@ for snap in snaps:
 
     print("Plotting:", snap, z)
 
+    print(massBins)
+
     ax.plot(massBins, phi_all, color=cmap(norm(z)))
 
 legend_elements1 = [Line2D([0], [0], color='k',
