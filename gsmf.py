@@ -214,11 +214,15 @@ for snap in snaps:
 
     V = np.product(boxsize) * Mpc**3
 
-    massBins, phi_all, _ = create_mass_function(mstar_temp,
+    try:
+        massBins, phi_all, _ = create_mass_function(mstar_temp,
                                                 10**7.95 * Msun,
                                                 10**12.05 * Msun,
                                                 box_volume=V,
                                                 n_bins=25)
+    except AssertionError:
+        print(mstar_temp)
+        continue
 
     if np.sum(phi_all) == 0:
         print("Less than 10 counts")
