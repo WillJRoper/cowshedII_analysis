@@ -180,6 +180,8 @@ for snap in eagle_snaps:
 
     print("Plotting:", snap, z)
 
+    massBins.convert_to_units("msun")
+
     ax.plot(massBins, phi_all, color=cmap(norm(z)),
             linestyle="dotted")
 
@@ -230,7 +232,7 @@ for snap in snaps:
 
     print("Plotting:", snap, z)
 
-    print(massBins)
+    massBins.convert_to_units("msun")
 
     ax.plot(massBins, phi_all, color=cmap(norm(z)))
 
