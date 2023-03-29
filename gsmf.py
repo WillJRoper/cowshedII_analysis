@@ -170,7 +170,7 @@ for snap in eagle_snaps:
                                                 10**12.05 * Msun, box_volume=V,
                                                 n_bins=25)
 
-    if np.sum(hist_all) < 10:
+    if np.sum(phi_all) == 0:
         print("Less than 10 counts")
         continue
 
@@ -216,7 +216,7 @@ for snap in snaps:
                                                 box_volume=V,
                                                 n_bins=25)
 
-    if np.sum(hist_all) < 10:
+    if np.sum(phi_all) == 0:
         print("Less than 10 counts")
         continue
 
